@@ -9,7 +9,7 @@ void drawHome(windowModel *windowM)
     int padding = 5;
     int font_size = 45;
 
-    for (int row = 0; row < 2; row++)
+    for (int row = 0; row < windowM->datas.nStaf; row++)
     {
         for (int col = 0; col < 10; col++)
         {
