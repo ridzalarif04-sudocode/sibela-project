@@ -2,11 +2,11 @@
 
 void drawMemberPage(windowModel *windowM)
 {
-    windowM->members[0] = (Member){.nama = "Rayyan Abdurrahman Qadar", .julukan = "Pak Ketua", .domisili = "Bekasi", .nim = "0920250049", .tanggalLahir = "XX XXXXX 200X", .image = windowM->members[0].image};
+    windowM->members[0] = (Member){.nama = "Rayyan Abdurrahman Qadar", .julukan = "Pak Ketua", .domisili = "Jakarta Utara", .nim = "0920250049", .tanggalLahir = "19 Oktober 2006", .image = windowM->members[0].image};
     windowM->members[1] = (Member){.nama = "Rasya Bintang Priyanto", .julukan = "Nol Lima", .domisili = "Cikarang Utara", .nim = "0920250048", .tanggalLahir = "14 Agustus 2007", .image = windowM->members[1].image};
     windowM->members[2] = (Member){.nama = "Teguh Bayu Pratama ", .julukan = "-", .domisili = "Palu", .nim = "0920250052", .tanggalLahir = "17 Juni 2007", .image = windowM->members[2].image};
     windowM->members[3] = (Member){.nama = "Ridzal Arif Billah", .julukan = "Extreme Programmer", .domisili = "Bekasi", .nim = "0920250051", .tanggalLahir = "04 Agustus 2007", .image = windowM->members[3].image};
-    windowM->members[4] = (Member){.nama = "Nabilah Tri Utami", .julukan = "Kroconya rijal", .domisili = "Magetan", .nim = "0920250044", .tanggalLahir = "XX XXXXX 200X", .image = windowM->members[4].image};
+    windowM->members[4] = (Member){.nama = "Nabilah Tri Utami", .julukan = "Kroconya rijal", .domisili = "Brebes", .nim = "0920250044", .tanggalLahir = "03 September 2007", .image = windowM->members[4].image};
 
     Member currMember = windowM->members[windowM->page - 1];
     char page[50];

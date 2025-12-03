@@ -25,6 +25,7 @@
         "windows.h": "c",
         "window.h": "c",
         "typeinfo": "c",
-        "landingview.h": "c"
+        "landingview.h": "c",
+        "raygui.h": "c"
     }
 }

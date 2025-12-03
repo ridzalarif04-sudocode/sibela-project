@@ -108,11 +108,10 @@ void updateView(windowModel *windowM)
                     break;
                 }
                 break;
-            default:
-                break;
             }
             break;
         }
+        break;
     case LANDINGPAGE:
         switch (ch)
         {
@@ -127,6 +126,7 @@ void updateView(windowModel *windowM)
             windowM->curPos = 0;
             break;
         }
+        break;
     case CONTRIBPAGE:
         switch (ch)
         {
@@ -137,6 +137,10 @@ void updateView(windowModel *windowM)
         case KEY_RIGHT:
             if (windowM->page < 5)
                 windowM->page++;
+            break;
+        case KEY_TAB:
+            windowM->currWindow = LANDINGPAGE;
+            windowM->page = 1;
             break;
         }
         break;

@@ -30,6 +30,7 @@ Staf findStafbyEmail(char email[], SQLHDBC *dbConn)
     SQLRETURN ret;
     char dateBuff[50];
     SQLUSMALLINT rowStatus[100];
+    foundRecord.id_num = -1;
 
     printf("Finding staf\n");
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
