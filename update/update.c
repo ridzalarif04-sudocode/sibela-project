@@ -33,6 +33,11 @@ void updateView(windowModel *windowM)
             break;
         case KEY_SPACE:
         case KEY_ENTER:
+            if (windowM->curPos == 7)
+            {
+                logoutFunction(windowM);
+                return;
+            }
             windowM->dataFetchers.admin[windowM->curPos](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
             windowM->selectedPage = windowM->curPos;
             windowM->curPos = 0;
@@ -60,6 +65,42 @@ void updateView(windowModel *windowM)
         case KEY_SPACE:
         case KEY_ENTER:
             // windowM->dataFetchers.admin[windowM->curPos](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+            if (windowM->curPos == 3)
+            {
+                logoutFunction(windowM);
+                return;
+            }
+            windowM->selectedPage = windowM->curPos;
+            windowM->curPos = 0;
+            windowM->cursorEnabled = 0;
+            break;
+        }
+        break;
+    case MURIDHOME:
+        switch (ch)
+        {
+        case KEY_W:
+        case KEY_UP:
+            windowM->curPos -= 1;
+            break;
+        case KEY_S:
+        case KEY_DOWN:
+            windowM->curPos += 1;
+            break;
+
+        case KEY_TAB:
+            windowM->cursorEnabled = 1;
+            windowM->selectedPage = -1;
+            windowM->curPos = 0;
+            break;
+        case KEY_SPACE:
+        case KEY_ENTER:
+            // windowM->dataFetchers.admin[windowM->curPos](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+            if (windowM->curPos == 3)
+            {
+                logoutFunction(windowM);
+                return;
+            }
             windowM->selectedPage = windowM->curPos;
             windowM->curPos = 0;
             windowM->cursorEnabled = 0;

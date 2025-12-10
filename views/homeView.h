@@ -14,5 +14,6 @@
 
 void drawHome(windowModel *windowM);
 void drawPengajarHome(windowModel *windowM);
+void drawMuridHome(windowModel *windowM);
 
 #endif

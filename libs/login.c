@@ -19,6 +19,9 @@ void loginFunction(windowModel *windowM)
             strcpy(windowM->loginData.password.text, "\0");
             windowM->loginData.password.charLen = 0;
             windowM->loginData.email.charLen = 0;
+            windowM->loginData.phoneNumber.charLen = 0;
+            strcpy(windowM->loginData.phoneNumber.text, "\0");
+            windowM->loginData.activeInput = 0;
 
             strcpy(windowM->authUser.id, loginStaf.id_staff);
             strcpy(windowM->authUser.nama, loginStaf.nama);
@@ -40,6 +43,9 @@ void loginFunction(windowModel *windowM)
             strcpy(windowM->loginData.password.text, "\0");
             windowM->loginData.password.charLen = 0;
             windowM->loginData.email.charLen = 0;
+            windowM->loginData.phoneNumber.charLen = 0;
+            strcpy(windowM->loginData.phoneNumber.text, "\0");
+            windowM->loginData.activeInput = 0;
 
             strcpy(windowM->authUser.id, loginMurid.id_murid);
             strcpy(windowM->authUser.nama, loginMurid.nama);
@@ -48,7 +54,7 @@ void loginFunction(windowModel *windowM)
         }
         break;
     case LOGINPENGAJAR:
-    Pengajar loginpengajar = findPengajarbyPhoneNum(windowM->loginData.phoneNumber.text, windowM->dbConn);
+        Pengajar loginpengajar = findPengajarbyPhoneNum(windowM->loginData.phoneNumber.text, windowM->dbConn);
 
         if (loginpengajar.id_num == -1)
             return;
@@ -61,6 +67,9 @@ void loginFunction(windowModel *windowM)
             strcpy(windowM->loginData.password.text, "\0");
             windowM->loginData.password.charLen = 0;
             windowM->loginData.email.charLen = 0;
+            windowM->loginData.phoneNumber.charLen = 0;
+            strcpy(windowM->loginData.phoneNumber.text, "\0");
+            windowM->loginData.activeInput = 0;
 
             strcpy(windowM->authUser.id, loginpengajar.id_pengajar);
             strcpy(windowM->authUser.nama, loginpengajar.nama);
@@ -69,4 +78,13 @@ void loginFunction(windowModel *windowM)
         }
         break;
     }
+}
+
+void logoutFunction(windowModel *windowM)
+{
+    windowM->curPos = 0;
+    windowM->currWindow = LANDINGPAGE;
+    strcpy(windowM->authUser.id, "\0");
+    strcpy(windowM->authUser.nama, "\0");
+    strcpy(windowM->authUser.role, "\0");
 }

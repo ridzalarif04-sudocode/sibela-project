@@ -7,5 +7,6 @@
 #include "../data/pengajar.h"
 
 void loginFunction(windowModel *windowM);
+void logoutFunction(windowModel *windowM);
 
 #endif
