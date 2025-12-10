@@ -58,6 +58,7 @@ typedef struct
 typedef struct
 {
     Texture2D logo;
+    Texture2D logoRobot;
 } image;
 
 typedef struct

@@ -17,7 +17,11 @@ void drawHome(windowModel *windowM)
     DrawRectangle(0, 0, 300, 1080, SECONDARY);
     // DrawTextEx(*windowM->fontStyle.mediumItalic, "SIBELA", (Vector2){50, 64}, 80, 0, SIBELAWHITE);
 
+    // Logo Sibela kiri Atas
     DrawTextureEx(windowM->images.logo, (Vector2){50, 64}, 0, 0.25, SIBELAWHITE);
+
+    // Logo RObot kiri bawah
+    DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
 
     for (int i = 0; i < sizeof(opsi) / sizeof(opsi[0]); i++)
     {

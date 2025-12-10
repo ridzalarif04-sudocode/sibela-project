@@ -41,6 +41,8 @@ int main()
     defaultWindow.dataFetchers.admin[0] = findAllStaff;
 
     defaultWindow.images.logo = LoadTexture("assets/images/sibela_Versi2.png");
+
+    defaultWindow.images.logoRobot = LoadTexture("assets/images/Robot_Sibela.png");
     // findAllStaff(&defaultWindow.datas, defaultWindow.dbConn);
     SetTargetFPS(120);
 
@@ -57,6 +59,7 @@ int main()
     UnloadFont(poppinsRegular);
     UnloadFont(poppinsMediumItalic);
     UnloadTexture(defaultWindow.images.logo);
+    UnloadTexture(defaultWindow.images.logoRobot);
     UnloadTexture(defaultWindow.members[0].image);
     UnloadTexture(defaultWindow.members[1].image);
     UnloadTexture(defaultWindow.members[2].image);
