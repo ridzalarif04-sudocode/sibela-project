@@ -126,7 +126,7 @@ void drawHome(windowModel *windowM)
         }
         break;
     default:
-        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){400, 90}, 40, 0, SIBELAWHITE);
+        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){300 + 1620 / 2 - MeasureTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), 80, 0).x / 2, 90}, 80, 0, SIBELAWHITE);
         break;
     }
 }
@@ -209,7 +209,7 @@ void drawPengajarHome(windowModel *windowM)
                    SIBELAWHITE);
         break;
     default:
-        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){400, 90}, 40, 0, SIBELAWHITE);
+        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){300 + 1620 / 2 - MeasureTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), 80, 0).x / 2, 90}, 80, 0, SIBELAWHITE);
         break;
     }
 }
@@ -258,7 +258,7 @@ void drawMuridHome(windowModel *windowM)
 
         break;
     default:
-        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){400, 90}, 40, 0, SIBELAWHITE);
+        DrawTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), (Vector2){300 + 1620 / 2 - MeasureTextEx(*windowM->fontStyle.medium, TextFormat("Halo, %s!", windowM->authUser.nama), 80, 0).x / 2, 90}, 80, 0, SIBELAWHITE);
         break;
     }
 }
