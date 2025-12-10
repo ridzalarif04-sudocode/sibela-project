@@ -9,6 +9,10 @@ void drawRootView(windowModel *windowM)
         // drawHeader();
         drawHome(windowM);
         break;
+    case PENGAJARHOME:
+        // drawHeader();
+        drawPengajarHome(windowM);
+        break;
     case LOGINSTAFF:
         drawHeader(windowM);
         drawStaffLogin(windowM);

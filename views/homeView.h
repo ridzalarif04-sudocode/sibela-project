@@ -13,5 +13,6 @@
 #include "../constants/color.h"
 
 void drawHome(windowModel *windowM);
+void drawPengajarHome(windowModel *windowM);
 
 #endif

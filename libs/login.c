@@ -44,7 +44,7 @@ void loginFunction(windowModel *windowM)
             strcpy(windowM->authUser.id, loginMurid.id_murid);
             strcpy(windowM->authUser.nama, loginMurid.nama);
             strcpy(windowM->authUser.role, "MURID");
-            windowM->currWindow = STAFHOME;
+            windowM->currWindow = MURIDHOME;
         }
         break;
     case LOGINPENGAJAR:
@@ -65,7 +65,7 @@ void loginFunction(windowModel *windowM)
             strcpy(windowM->authUser.id, loginpengajar.id_pengajar);
             strcpy(windowM->authUser.nama, loginpengajar.nama);
             strcpy(windowM->authUser.role, "PENGAJAR");
-            windowM->currWindow = STAFHOME;
+            windowM->currWindow = PENGAJARHOME;
         }
         break;
     }
