@@ -148,7 +148,8 @@ void drawPengajarHome(windowModel *windowM)
     // DrawTextEx(*windowM->fontStyle.mediumItalic, "SIBELA", (Vector2){50, 64}, 80, 0, SIBELAWHITE);
 
     // Logo Sibela kiri Atas
-    DrawTextureEx(windowM->images.logo, (Vector2){40, 64}, 0, 0.30, SIBELAWHITE);
+    DrawRectangle(0, 0, 300, 200, SIBELAWHITE);
+    DrawTextureEx(windowM->images.logo, (Vector2){40, 50}, 0, 0.30, SIBELAWHITE);
 
     // Logo RObot kiri bawah
     DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
@@ -228,7 +229,8 @@ void drawMuridHome(windowModel *windowM)
     // DrawTextEx(*windowM->fontStyle.mediumItalic, "SIBELA", (Vector2){50, 64}, 80, 0, SIBELAWHITE);
 
     // Logo Sibela kiri Atas
-    DrawTextureEx(windowM->images.logo, (Vector2){40, 64}, 0, 0.30, SIBELAWHITE);
+    DrawRectangle(0, 0, 300, 200, SIBELAWHITE);
+    DrawTextureEx(windowM->images.logo, (Vector2){40, 50}, 0, 0.30, SIBELAWHITE);
 
     // Logo RObot kiri bawah
     DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
