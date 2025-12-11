@@ -20,9 +20,9 @@ void drawHome(windowModel *windowM)
 
     // Logo Sibela kiri Atas
     DrawRectangle(0, 0, 300, 200, SIBELAWHITE);
-    DrawTextureEx(windowM->images.logo, (Vector2){40, 64}, 0, 0.30, SIBELAWHITE);
+    DrawTextureEx(windowM->images.logo, (Vector2){40, 44}, 0, 0.30, SIBELAWHITE);
 
-    // Logo RObot kiri bawah
+    // Logo Robot kiri bawah
     DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
 
     for (int i = 0; i < sizeof(opsi) / sizeof(opsi[0]); i++)
@@ -149,9 +149,9 @@ void drawPengajarHome(windowModel *windowM)
 
     // Logo Sibela kiri Atas
     DrawRectangle(0, 0, 300, 200, SIBELAWHITE);
-    DrawTextureEx(windowM->images.logo, (Vector2){40, 64}, 0, 0.30, SIBELAWHITE);
+    DrawTextureEx(windowM->images.logo, (Vector2){40, 44}, 0, 0.30, SIBELAWHITE);
 
-    // Logo RObot kiri bawah
+    // Logo Robot kiri bawah
     DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
 
     for (int i = 0; i < sizeof(opsi) / sizeof(opsi[0]); i++)
@@ -230,9 +230,9 @@ void drawMuridHome(windowModel *windowM)
 
     // Logo Sibela kiri Atas
     DrawRectangle(0, 0, 300, 200, SIBELAWHITE);
-    DrawTextureEx(windowM->images.logo, (Vector2){40, 64}, 0, 0.30, SIBELAWHITE);
+    DrawTextureEx(windowM->images.logo, (Vector2){40, 44}, 0, 0.30, SIBELAWHITE);
 
-    // Logo RObot kiri bawah
+    // Logo Robot kiri bawah
     DrawTextureEx(windowM->images.logoRobot, (Vector2){50, 820}, 0, 0.25, SIBELAWHITE);
 
     for (int i = 0; i < sizeof(opsi) / sizeof(opsi[0]); i++)

@@ -33,6 +33,7 @@ int main()
     defaultWindow.fontStyle.regular = &poppinsRegular;
     defaultWindow.fontStyle.mediumItalic = &poppinsMediumItalic;
     defaultWindow.datas.page = 1;
+    // Image Member
     defaultWindow.members[0].image = LoadTexture("assets/images/member/rayyan.png");
     defaultWindow.members[1].image = LoadTexture("assets/images/member/rasya.png");
     defaultWindow.members[2].image = LoadTexture("assets/images/member/bayu.png");
@@ -40,9 +41,11 @@ int main()
     defaultWindow.members[4].image = LoadTexture("assets/images/member/nabilah.png");
     defaultWindow.dataFetchers.admin[0] = findAllStaff;
 
+    // Logo Sibela
     defaultWindow.images.logo = LoadTexture("assets/images/sibela_Versi2.png");
-
+    // Logo Robot Sibela
     defaultWindow.images.logoRobot = LoadTexture("assets/images/Robot_Sibela.png");
+
     // findAllStaff(&defaultWindow.datas, defaultWindow.dbConn);
     SetTargetFPS(120);
 

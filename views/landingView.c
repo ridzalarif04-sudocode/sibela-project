@@ -11,7 +11,7 @@ void drawLandingPage(windowModel *windowM)
     windowM->navigation.landingPage[2] = (NavMenus){.nama = "Login Pengajar", .targetPage = LOGINPENGAJAR};
     windowM->navigation.landingPage[3] = (NavMenus){.nama = "Pembuat", .targetPage = CONTRIBPAGE};
 
-    DrawRectangleLinesEx(box, 2, SIBELAWHITE);
+    DrawRectangleLinesEx(box, 7, SIBELAWHITE);
 
     for (int i = 0; i < 4; i++)
     {
