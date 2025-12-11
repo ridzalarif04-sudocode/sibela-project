@@ -10,6 +10,8 @@ typedef struct
 {
     Staf staffs[100];
     SQLSMALLINT nStaf;
+    Pengajar pengajars[100];
+    SQLSMALLINT nPengajar;
     int page;
     int totalPages;
 } data;
