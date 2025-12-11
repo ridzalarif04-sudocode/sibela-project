@@ -121,7 +121,7 @@ QUERYSTATUS createPengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar ne
     char *dateBuff;
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO pengajar (nama, tanggal_lahir, no_hp, password, ) VALUES (?,?,?,?)", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO pengajar (nama, tanggal_lahir, no_hp, password) VALUES (?,?,?,?)", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newPengajar.nama), 0, newPengajar.nama, 0, NULL);
     dateBuff = parseDateToString(newPengajar.tanggal_lahir);
     printf("date: %s\n", dateBuff);
