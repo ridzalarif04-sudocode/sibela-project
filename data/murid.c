@@ -60,7 +60,7 @@ Murid findMuridbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
 }
 
 
-void findAllMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn)
+void findAllMurid(data *datas, int *nPage, SQLHDBC *dbConn)
 {
 
     if (datas->nMurid > 0)
@@ -115,7 +115,7 @@ void findAllMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn)
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
 
-QUERYSTATUS createMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn, Murid newMurid)
+QUERYSTATUS createMurid(data *datas, int *nPage, SQLHDBC *dbConn, Murid newMurid)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;
@@ -150,7 +150,7 @@ QUERYSTATUS createMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn, Murid new
     }
 }
 
-QUERYSTATUS updateMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn, Murid updatedMurid)
+QUERYSTATUS updateMurid(data *datas, int *nPage, SQLHDBC *dbConn, Murid updatedMurid)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;
@@ -185,7 +185,7 @@ QUERYSTATUS updateMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn, Murid upd
     }
 }
 
-QUERYSTATUS deleteMurid(dataMurid *datas, int *nPage, SQLHDBC *dbConn, Murid updatedMurid)
+QUERYSTATUS deleteMurid(data *datas, int *nPage, SQLHDBC *dbConn, Murid updatedMurid)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;

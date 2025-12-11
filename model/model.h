@@ -10,17 +10,15 @@ typedef struct
 {
     Staf staffs[100];
     SQLSMALLINT nStaf;
-    int page;
-    int totalPages;
-} data;
-
-typedef struct
-{
+    Pengajar pengajars[100];
+    SQLSMALLINT nPengajar;
     Murid murids[100];
     SQLSMALLINT nMurid;
     int page;
     int totalPages;
-} dataMurid;
+} data;
+
+
 
 typedef enum
 {
