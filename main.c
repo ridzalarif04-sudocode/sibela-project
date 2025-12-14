@@ -4,12 +4,13 @@
 #include "update/update.h"
 #include "views/drawView.h"
 #include "data/staf.h"
+#include "data/mapel.h"
 #include "views/Loading.h"
 
 int main()
 {
-    SetConfigFlags(FLAG_FULLSCREEN_MODE);
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
+    // SetConfigFlags(FLAG_FULLSCREEN_MODE);
+    // SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(1920, 1080, "Sibela");
 
     ToggleFullscreen();
@@ -27,12 +28,23 @@ int main()
         .page = 1,
         .cursorEnabled = 1,
         .selectedPage = -1,
+        .isModalShown = 0,
         .dbConn = &dbConn,
+        .activeSubWindow = READ,
         .loginData = {.email = {.charLen = 0, .text = "\0"}, .activeInput = 0}};
     defaultWindow.fontStyle.medium = &poppinsMedium;
     defaultWindow.fontStyle.regular = &poppinsRegular;
     defaultWindow.fontStyle.mediumItalic = &poppinsMediumItalic;
     defaultWindow.datas.page = 1;
+    defaultWindow.forms[0].fields[1] = (InputField){.label = "Nama", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[0].fields[2] = (InputField){.label = "Tanggal Lahir", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[0].fields[3] = (InputField){.label = "No. HP", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[0].fields[4] = (InputField){.label = "Password", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[0].fields[5] = (InputField){.label = "Email", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[0].fields[6] = (InputField){.label = "Submit", .type = BUTTONINPUT};
+    defaultWindow.forms[0].nField = 6;
+    defaultWindow.forms[0].fieldPerPage = 4;
+    defaultWindow.forms[0].func = createStaff;
     // Image Member
     defaultWindow.members[0].image = LoadTexture("assets/images/member/rayyan.png");
     defaultWindow.members[1].image = LoadTexture("assets/images/member/rasya.png");
@@ -40,6 +52,8 @@ int main()
     defaultWindow.members[3].image = LoadTexture("assets/images/member/rijal.png");
     defaultWindow.members[4].image = LoadTexture("assets/images/member/nabilah.png");
     defaultWindow.dataFetchers.admin[0] = findAllStaff;
+    defaultWindow.dataFetchers.admin[2] = findAllPengajar;
+    defaultWindow.dataFetchers.admin[4] = findAllMapel;
 
     // Logo Sibela
     defaultWindow.images.logo = LoadTexture("assets/images/sibela_Versi2.png");
@@ -48,7 +62,6 @@ int main()
 
     defaultWindow.isLoading = true;
     defaultWindow.loadingTime = 0.0f;
-
 
     // findAllStaff(&defaultWindow.datas, defaultWindow.dbConn);
     SetTargetFPS(120);

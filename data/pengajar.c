@@ -49,7 +49,6 @@ Pengajar findPengajarbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
                        &foundRecord.no_hp, sizeof(foundRecord.no_hp), NULL);
             SQLGetData(stmt, 7, SQL_C_CHAR,
                        &foundRecord.password, sizeof(foundRecord.password), NULL);
-            
         }
     }
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
@@ -59,10 +58,6 @@ Pengajar findPengajarbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
 
 void findAllPengajar(data *datas, int *nPage, SQLHDBC *dbConn)
 {
-
-    if (datas->nPengajar > 0)
-        return;
-
     SQLHSTMT stmt;
     SQLRETURN ret;
     int count;
@@ -79,10 +74,16 @@ void findAllPengajar(data *datas, int *nPage, SQLHDBC *dbConn)
         }
     }
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-    *nPage = (int)ceil((float)count / 10);
-    printf("awikwok %d\n", *nPage);
+    int limit = 10;
+    int offset = (datas->page - 1) * limit;
+    *nPage = (int)ceil((float)count / limit);
+
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT * FROM pengajar", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT * FROM pengajar ORDER BY tanggal_masuk DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
+
+    ret = SQLExecute(stmt);
     while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
     {
         printf("Successfully fetched %lld rows\n", rowsFetched);

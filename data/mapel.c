@@ -9,10 +9,6 @@
 
 void findAllMapel(data *datas, int *nPage, SQLHDBC *dbConn)
 {
-
-    if (datas->nMapel > 0)
-        return;
-
     SQLHSTMT stmt;
     SQLRETURN ret;
     int count;
@@ -20,7 +16,7 @@ void findAllMapel(data *datas, int *nPage, SQLHDBC *dbConn)
 
     SQLLEN rowsFetched = 0;
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT COUNT(*) AS row_count FROM Mapel", SQL_NTS);
+    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT COUNT(*) AS row_count FROM mapel", SQL_NTS);
     if (SQL_SUCCEEDED(ret))
     {
         if (SQL_SUCCEEDED(SQLFetch(stmt)))
@@ -29,16 +25,20 @@ void findAllMapel(data *datas, int *nPage, SQLHDBC *dbConn)
         }
     }
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-    *nPage = (int)ceil((float)count / 10);
-    printf("awikwok %d\n", *nPage);
+    int limit = 10;
+    int offset = (datas->page - 1) * limit;
+    *nPage = (int)ceil((float)count / limit);
+
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT * FROM Mapel", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT * FROM mapel ORDER BY nama_mapel ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
+
+    ret = SQLExecute(stmt);
     while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
     {
-        printf("Successfully fetched %lld rows\n", rowsFetched);
         char dateBuff[50];
         int i = (int)rowsFetched;
-        printf("awikwok %d\n", i);
 
         SQLGetData(stmt, 1, SQL_C_LONG,
                    &datas->Mapels[i].id_num, sizeof(datas->Mapels[i].id_num), NULL);
@@ -61,7 +61,7 @@ QUERYSTATUS createMapel(data *datas, int *nPage, SQLHDBC *dbConn, Mapel newMapel
     char *dateBuff;
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO Mapel (nama_mapel) VALUES (?)", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO mapel (nama_mapel) VALUES (?)", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newMapel.nama_mapel), 0, newMapel.nama_mapel, 0, NULL);
     ret = SQLExecute(stmt);
 
@@ -91,10 +91,9 @@ QUERYSTATUS updateMapel(data *datas, int *nPage, SQLHDBC *dbConn, Mapel updatedM
     char *dateBuff;
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    SQLPrepare(stmt, (SQLCHAR *)"UPDATE Mapel id_num = ?, id_mapel = ?, nama_mapel = ?, WHERE id_mapel = ?", SQL_NTS);
-    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.id_num), 0, updatedMapel.id_num, 0, NULL);
-    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.id_mapel), 0, updatedMapel.id_mapel, 0, NULL);
-    SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.nama_mapel), 0, updatedMapel.nama_mapel, 0, NULL);
+    SQLPrepare(stmt, (SQLCHAR *)"UPDATE Mapel nama_mapel = ? WHERE id_mapel = ?", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.nama_mapel), 0, updatedMapel.nama_mapel, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.id_mapel), 0, updatedMapel.id_mapel, 0, NULL);
     ret = SQLExecute(stmt);
 
     if (SQL_SUCCEEDED(ret))
@@ -122,7 +121,7 @@ QUERYSTATUS deleteMapel(data *datas, int *nPage, SQLHDBC *dbConn, Mapel updatedM
     SQLUSMALLINT rowStatus[100];
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    SQLPrepare(stmt, (SQLCHAR *)"DELETE FROM Mapel WHERE id_Mapel = ?", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"DELETE FROM mapel WHERE id_Mapel = ?", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMapel.id_mapel), 0, updatedMapel.id_mapel, 0, NULL);
     ret = SQLExecute(stmt);
 

@@ -1,23 +1,22 @@
 #include "drawView.h"
 #include "Loading.h"
+#define RAYGUI_IMPLEMENTATION
+#include "../libs/headers/raygui.h"
 
 void drawRootView(windowModel *windowM)
 {
     ClearBackground(TERTIARY);
-    // if (windowM->isLoading) {
-    //     float progress = windowM->loadingTime / 2.0f;
-    //     if (progress > 1.0f) progress = 1.0f;
-    //     LoadingScreen(windowM, progress);
-    //     return;
-    // }
-    if (windowM->isLoading) {
-        LoadingScreen(windowM, windowM->loadingTime / 2.0f);  
+
+    if (windowM->isLoading)
+    {
+        LoadingScreen(windowM, windowM->loadingTime / 2.0f);
         return;
     }
+
     switch (windowM->currWindow)
     {
     case STAFHOME:
-        drawHome(windowM);
+        drawStaffHome(windowM);
         break;
     case PENGAJARHOME:
         drawPengajarHome(windowM);

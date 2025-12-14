@@ -1,6 +1,4 @@
 #include "landingView.h"
-#define RAYGUI_IMPLEMENTATION
-#include "../libs/headers/raygui.h"
 
 void drawLandingPage(windowModel *windowM)
 {

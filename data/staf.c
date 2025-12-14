@@ -43,11 +43,9 @@ Staf findStafbyEmail(char email[], SQLHDBC *dbConn)
             SQLGetData(stmt, 4, SQL_C_CHAR,
                        &foundRecord.nama, sizeof(foundRecord.nama), NULL);
             SQLGetData(stmt, 5, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_lahir = parseDate(dateBuff);
+                       foundRecord.tanggal_lahir, sizeof(foundRecord.tanggal_lahir), NULL);
             SQLGetData(stmt, 6, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_masuk = parseDate(dateBuff);
+                       foundRecord.tanggal_masuk, sizeof(foundRecord.tanggal_masuk), NULL);
             SQLGetData(stmt, 7, SQL_C_CHAR,
                        &foundRecord.no_hp, sizeof(foundRecord.no_hp), NULL);
             SQLGetData(stmt, 8, SQL_C_CHAR,
@@ -64,10 +62,6 @@ Staf findStafbyEmail(char email[], SQLHDBC *dbConn)
 
 void findAllStaff(data *datas, int *nPage, SQLHDBC *dbConn)
 {
-
-    if (datas->nStaf > 0)
-        return;
-
     SQLHSTMT stmt;
     SQLRETURN ret;
     int count;
@@ -84,16 +78,20 @@ void findAllStaff(data *datas, int *nPage, SQLHDBC *dbConn)
         }
     }
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-    *nPage = (int)ceil((float)count / 10);
-    printf("awikwok %d\n", *nPage);
+    int limit = 10;
+    int offset = (datas->page - 1) * limit;
+    *nPage = (int)ceil((float)count / limit);
+
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT * FROM staff", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT * FROM staff ORDER BY tanggal_masuk DESC, id_staff DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
+
+    ret = SQLExecute(stmt);
     while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
     {
-        printf("Successfully fetched %lld rows\n", rowsFetched);
         char dateBuff[50];
         int i = (int)rowsFetched;
-        printf("awikwok %d\n", i);
 
         SQLGetData(stmt, 1, SQL_C_LONG,
                    &datas->staffs[i].id_num, sizeof(datas->staffs[i].id_num), NULL);
@@ -104,25 +102,22 @@ void findAllStaff(data *datas, int *nPage, SQLHDBC *dbConn)
         SQLGetData(stmt, 4, SQL_C_CHAR,
                    &datas->staffs[i].nama, sizeof(datas->staffs[i].nama), NULL);
         SQLGetData(stmt, 5, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->staffs[rowsFetched].tanggal_lahir = parseDate(dateBuff);
+                   datas->staffs[rowsFetched].tanggal_lahir, sizeof(datas->staffs[rowsFetched].tanggal_lahir), NULL);
         SQLGetData(stmt, 6, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->staffs[rowsFetched].tanggal_masuk = parseDate(dateBuff);
+                   datas->staffs[rowsFetched].tanggal_masuk, sizeof(datas->staffs[rowsFetched].tanggal_masuk), NULL);
         SQLGetData(stmt, 7, SQL_C_CHAR,
                    &datas->staffs[i].no_hp, sizeof(datas->staffs[i].no_hp), NULL);
         SQLGetData(stmt, 8, SQL_C_CHAR,
                    &datas->staffs[i].password, sizeof(datas->staffs[i].password), NULL);
         SQLGetData(stmt, 9, SQL_C_CHAR,
                    &datas->staffs[i].email, sizeof(datas->staffs[i].email), NULL);
-        printf("staff %d: %s\n", i, datas->staffs[i].nama);
         rowsFetched++;
     }
     datas->nStaf = rowsFetched;
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
 
-QUERYSTATUS createStaff(data *datas, int *nPage, SQLHDBC *dbConn, Staf newStaff)
+QUERYSTATUS createStaff(InputField fields[], SQLHDBC *dbConn)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;
@@ -130,12 +125,18 @@ QUERYSTATUS createStaff(data *datas, int *nPage, SQLHDBC *dbConn, Staf newStaff)
     SQLUSMALLINT rowStatus[100];
     char *dateBuff;
 
+    Staf newStaff;
+
+    strcpy(newStaff.nama, fields[1].value.text);
+    strcpy(newStaff.tanggal_lahir, fields[2].value.text);
+    strcpy(newStaff.no_hp, fields[3].value.text);
+    strcpy(newStaff.password, fields[4].value.text);
+    strcpy(newStaff.email, fields[5].value.text);
+
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO staff (nama, tanggal_lahir, no_hp, password, email) VALUES (?,?,?,?,?)", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newStaff.nama), 0, newStaff.nama, 0, NULL);
-    dateBuff = parseDateToString(newStaff.tanggal_lahir);
-    printf("date: %s\n", dateBuff);
-    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen("2028-10-20"), 0, "2028-10-20", 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(newStaff.tanggal_lahir), 0, newStaff.tanggal_lahir, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newStaff.no_hp), 0, newStaff.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newStaff.password), 0, newStaff.password, 0, NULL);
     SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newStaff.email), 0, newStaff.email, 0, NULL);
@@ -169,8 +170,7 @@ QUERYSTATUS updateStaff(data *datas, int *nPage, SQLHDBC *dbConn, Staf updatedSt
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"UPDATE staff SET nama = ?, tanggal_lahir = ?, no_hp = ?, password = ?, email = ? WHERE id_staff = ?", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedStaff.nama), 0, updatedStaff.nama, 0, NULL);
-    dateBuff = parseDateToString(updatedStaff.tanggal_lahir);
-    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(dateBuff), 0, dateBuff, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(updatedStaff.tanggal_lahir), 0, updatedStaff.tanggal_lahir, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedStaff.no_hp), 0, updatedStaff.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedStaff.password), 0, updatedStaff.password, 0, NULL);
     SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedStaff.email), 0, updatedStaff.email, 0, NULL);

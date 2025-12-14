@@ -2,20 +2,23 @@
 
 void updateView(windowModel *windowM)
 {
-    if (windowM->isLoading) {
-    windowM->loadingTime += GetFrameTime();
-    float progress = windowM->loadingTime / 2.0f;   
+    if (windowM->isLoading)
+    {
+        windowM->loadingTime += GetFrameTime();
+        float progress = windowM->loadingTime / 2.0f;
 
-    if (progress > 1.0f) progress = 1.0f;
-    windowM->progress = progress;
+        if (progress > 1.0f)
+            progress = 1.0f;
+        windowM->progress = progress;
 
-    if (windowM->loadingTime >= 2.0f) {
-        windowM->isLoading = false;
-        windowM->currWindow = LANDINGPAGE;
+        if (windowM->loadingTime >= 2.0f)
+        {
+            windowM->isLoading = false;
+            windowM->currWindow = LANDINGPAGE;
+        }
+
+        return;
     }
-
-    return; 
-}
     int ch = GetKeyPressed();
     switch (ch)
     {
@@ -31,11 +34,9 @@ void updateView(windowModel *windowM)
     case STAFHOME:
         switch (ch)
         {
-        case KEY_W:
         case KEY_UP:
             windowM->curPos -= 1;
             break;
-        case KEY_S:
         case KEY_DOWN:
             windowM->curPos += 1;
             break;
@@ -43,19 +44,113 @@ void updateView(windowModel *windowM)
         case KEY_TAB:
             windowM->cursorEnabled = 1;
             windowM->selectedPage = -1;
+            windowM->activeSubWindow = READ;
             windowM->curPos = 0;
             break;
-        case KEY_SPACE:
-        case KEY_ENTER:
-            if (windowM->curPos == 7)
+
+        default:
+
+            if (!windowM->cursorEnabled && windowM->activeSubWindow == CREATE)
             {
-                logoutFunction(windowM);
-                return;
+                switch (ch)
+                {
+                case KEY_RIGHT:
+
+                    windowM->page++;
+                    windowM->curPos = windowM->page * windowM->forms[windowM->selectedPage].fieldPerPage - windowM->forms[windowM->selectedPage].fieldPerPage + 1;
+                    break;
+                case KEY_LEFT:
+                    windowM->page--;
+                    windowM->curPos = windowM->page * windowM->forms[windowM->selectedPage].fieldPerPage - windowM->forms[windowM->selectedPage].fieldPerPage + 1;
+                    break;
+                default:
+                    switch (windowM->forms[windowM->selectedPage].fields[windowM->curPos].type)
+                    {
+                    case TEXTINPUT:
+                        ch = GetCharPressed();
+                        while (ch > 0)
+                        {
+                            if ((ch >= 32) && (ch <= 125) && (windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen < 100))
+                            {
+                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen] = (char)ch;
+                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen + 1] = '\0';
+                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen++;
+                            }
+
+                            ch = GetCharPressed();
+                        }
+
+                        if (IsKeyPressed(KEY_BACKSPACE))
+                        {
+                            windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen--;
+                            if (windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen < 0)
+                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen = 0;
+                            windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen] = '\0';
+                        }
+                        break;
+                    case BUTTONINPUT:
+                        switch (ch)
+                        {
+                        case KEY_ENTER:
+                            windowM->forms[windowM->selectedPage].func(windowM->forms[windowM->selectedPage].fields, windowM->dbConn);
+                            windowM->dataFetchers.admin[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+                            windowM->activeSubWindow = READ;
+                            break;
+                        }
+                        break;
+                    }
+                    break;
+                }
             }
-            windowM->dataFetchers.admin[windowM->curPos](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
-            windowM->selectedPage = windowM->curPos;
-            windowM->curPos = 0;
-            windowM->cursorEnabled = 0;
+            if (!windowM->cursorEnabled && windowM->activeSubWindow == READ)
+            {
+                switch (ch)
+                {
+                case KEY_N:
+                    windowM->activeSubWindow = CREATE;
+                    windowM->curPos = 1;
+                    break;
+                case KEY_RIGHT:
+                    if (windowM->datas.page < windowM->datas.totalPages)
+                    {
+                        windowM->datas.page++;
+                        windowM->curPos = 0;
+                        windowM->dataFetchers.admin[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+                    }
+
+                    break;
+                case KEY_ENTER:
+                    windowM->isModalShown = 1;
+                    break;
+                case KEY_LEFT:
+                    if (windowM->datas.page > 1)
+                    {
+                        windowM->datas.page--;
+                        windowM->curPos = 0;
+                        windowM->dataFetchers.admin[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+                    }
+                    break;
+                }
+            }
+            if (windowM->cursorEnabled)
+            {
+                switch (ch)
+                {
+                case KEY_ENTER:
+
+                    if (windowM->curPos == 7)
+                    {
+                        logoutFunction(windowM);
+                        return;
+                    }
+                    windowM->dataFetchers.admin[windowM->curPos](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+                    windowM->selectedPage = windowM->curPos;
+                    windowM->datas.page = 1;
+                    windowM->curPos = 0;
+                    windowM->cursorEnabled = 0;
+                    break;
+                }
+            }
             break;
         }
         break;
@@ -73,6 +168,7 @@ void updateView(windowModel *windowM)
 
         case KEY_TAB:
             windowM->cursorEnabled = 1;
+            windowM->activeSubWindow = READ;
             windowM->selectedPage = -1;
             windowM->curPos = 0;
             break;

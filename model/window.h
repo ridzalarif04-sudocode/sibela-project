@@ -3,6 +3,7 @@
 
 #include "model.h"
 #include "../types/dbTypes.h"
+#include "../types/form.h"
 #include "../libs/headers/raylib.h"
 
 typedef enum
@@ -18,6 +19,13 @@ typedef enum
     CONTRIBPAGE
 } WINDOWS;
 
+typedef enum
+{
+    READ,
+    CREATE,
+    UPDATE,
+} SUBWINDOW;
+
 typedef struct
 {
     char nama[50];
@@ -29,12 +37,6 @@ typedef struct
     char nama[50];
     int targetPage;
 } NavMenus;
-
-typedef struct
-{
-    char text[100];
-    int charLen;
-} InputParams;
 
 typedef struct
 {
@@ -95,6 +97,8 @@ typedef struct
     WINDOWS currWindow;
     int shouldClose;
     int curPos;
+    int isModalShown;
+    int activeSubWindow;
     int selectedPage;
     int cursorEnabled;
     SQLHDBC *dbConn;
@@ -104,6 +108,7 @@ typedef struct
     Member members[5];
     data datas;
     int page;
+    FORM forms[10];
     PageNav navigation;
     user authUser;
     fetcher dataFetchers;
