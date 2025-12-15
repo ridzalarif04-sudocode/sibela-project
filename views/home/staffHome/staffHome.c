@@ -41,7 +41,7 @@ void drawStaffHome(windowModel *windowM)
             drawStaffRead(windowM);
             break;
         case 2:
-            drawPengajarCreate(windowM);
+            drawPengajarRead(windowM);
             break;
         case 4:
             drawMapelRead(windowM);
@@ -57,6 +57,9 @@ void drawStaffHome(windowModel *windowM)
         {
         case 0:
             drawStaffCreate(windowM);
+            break;
+        case 2:
+            drawPengajarCreate(windowM);
             break;
         }
     }

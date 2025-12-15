@@ -25,9 +25,9 @@ typedef struct
     int id_num;
     char id_murid[7];
     char nama[101];
-    time_t tanggal_lahir;
+    char tanggal_lahir[20];
     int tingkat;
-    time_t tanggal_masuk;
+    char tanggal_masuk[20];
     char no_hp[16];
     char password[101];
 } Murid;
@@ -37,8 +37,8 @@ typedef struct
     int id_num;
     char id_pengajar[8];
     char nama[101];
-    time_t tanggal_lahir;
-    time_t tanggal_masuk;
+    char tanggal_lahir[20];
+    char tanggal_masuk[20];
     char no_hp[16];
     char password[101];
 } Pengajar;
@@ -70,19 +70,6 @@ typedef struct
     char id_mapel[7];
     char nama_mapel[101];
 } Mapel;
-
-typedef struct
-{
-    int id_num;
-    char id_staff[30];
-    char role[20];
-    char nama[255];
-    time_t tanggal_lahir;
-    time_t tanggal_masuk;
-    char no_hp[20];
-    char password[100];
-    char email[100];
-} ;
 
 // typedef struct
 //     {
