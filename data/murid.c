@@ -12,7 +12,6 @@ Murid findMuridbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
     Murid foundRecord;
     SQLHSTMT stmt;
     SQLRETURN ret;
-    char dateBuff[50];
     SQLUSMALLINT rowStatus[100];
     foundRecord.id_num = -1;
 
@@ -40,13 +39,11 @@ Murid findMuridbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
             SQLGetData(stmt, 3, SQL_C_CHAR,
                        &foundRecord.nama, sizeof(foundRecord.nama), NULL);
             SQLGetData(stmt, 4, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_lahir = parseDate(dateBuff);
+                       foundRecord.tanggal_lahir, sizeof(foundRecord.tanggal_lahir), NULL);
             SQLGetData(stmt, 5, SQL_C_LONG,
                        &foundRecord.tingkat, sizeof(foundRecord.tingkat), NULL);
             SQLGetData(stmt, 6, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_masuk = parseDate(dateBuff);
+                       foundRecord.tanggal_masuk, sizeof(foundRecord.tanggal_masuk), NULL);
             SQLGetData(stmt, 7, SQL_C_CHAR,
                        &foundRecord.no_hp, sizeof(foundRecord.no_hp), NULL);
             SQLGetData(stmt, 8, SQL_C_CHAR,
@@ -100,11 +97,9 @@ void findAllMurid(data *datas, int *nPage, SQLHDBC *dbConn)
         SQLGetData(stmt, 3, SQL_C_CHAR,
                    &datas->murids[i].nama, sizeof(datas->murids[i].nama), NULL);
         SQLGetData(stmt, 4, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->murids[rowsFetched].tanggal_lahir = parseDate(dateBuff);
+                   datas->murids[rowsFetched].tanggal_lahir, sizeof(datas->murids[rowsFetched].tanggal_lahir), NULL);
         SQLGetData(stmt, 5, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->murids[rowsFetched].tanggal_masuk = parseDate(dateBuff);
+                   datas->murids[rowsFetched].tanggal_masuk, sizeof(datas->murids[rowsFetched].tanggal_masuk), NULL);
         SQLGetData(stmt, 6, SQL_C_CHAR,
                    &datas->murids[i].no_hp, sizeof(datas->murids[i].no_hp), NULL);
         SQLGetData(stmt, 7, SQL_C_CHAR,
@@ -126,9 +121,7 @@ QUERYSTATUS createMurid(data *datas, int *nPage, SQLHDBC *dbConn, Murid newMurid
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO murid (nama, tanggal_lahir, no_hp, password) VALUES (?,?,?,?)", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newMurid.nama), 0, newMurid.nama, 0, NULL);
-    dateBuff = parseDateToString(newMurid.tanggal_lahir);
-    printf("date: %s\n", dateBuff);
-    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen("2028-10-20"), 0, "2028-10-20", 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(newMurid.tanggal_lahir), 0, newMurid.tanggal_lahir, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newMurid.no_hp), 0, newMurid.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newMurid.password), 0, newMurid.password, 0, NULL);
     ret = SQLExecute(stmt);
@@ -161,7 +154,6 @@ QUERYSTATUS updateMurid(data *datas, int *nPage, SQLHDBC *dbConn, Murid updatedM
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"UPDATE staff SET nama = ?, tanggal_lahir = ?, no_hp = ?, password = ? WHERE id_murid = ?", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMurid.nama), 0, updatedMurid.nama, 0, NULL);
-    dateBuff = parseDateToString(updatedMurid.tanggal_lahir);
     SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(dateBuff), 0, dateBuff, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMurid.no_hp), 0, updatedMurid.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedMurid.password), 0, updatedMurid.password, 0, NULL);

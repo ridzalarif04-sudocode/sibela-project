@@ -1,4 +1,5 @@
 #include "read.h"
+#include "../../../../../libs/headers/raygui.h"
 
 void drawPengajarRead(windowModel *windowM)
 {
@@ -54,6 +55,7 @@ void drawPengajarRead(windowModel *windowM)
                 cell_height};
             if (row == windowM->curPos)
             {
+                windowM->focusedData.pengajar = windowM->datas.pengajars[row];
                 DrawRectangleRec(cellRect, PRIMARY);
             }
             DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
@@ -84,4 +86,17 @@ void drawPengajarRead(windowModel *windowM)
                          1000},
                40, 0,
                SIBELAWHITE);
+    if (windowM->isModalShown)
+    {
+        int res = GuiMessageBox((Rectangle){.height = 200, .width = 300, .x = 1920 / 2 - 150, .y = 1080 / 2 - 300}, "Delete Pengajar?", TextFormat("Apakah anda ingin menghapus Pengajar %s?", windowM->focusedData.pengajar.id_pengajar), "Batal;Hapus!");
+
+        if (res == 2)
+        {
+            deletePengajar(windowM->dbConn, windowM->focusedData.pengajar);
+            windowM->dataFetchers.admin[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
+            windowM->isModalShown = 0;
+        }
+        else if (res >= 0 && res < 2)
+            windowM->isModalShown = 0;
+    }
 }

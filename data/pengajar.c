@@ -12,7 +12,6 @@ Pengajar findPengajarbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
     Pengajar foundRecord;
     SQLHSTMT stmt;
     SQLRETURN ret;
-    char dateBuff[50];
     SQLUSMALLINT rowStatus[100];
     foundRecord.id_num = -1;
 
@@ -40,11 +39,9 @@ Pengajar findPengajarbyPhoneNum(char PhoneNum[], SQLHDBC *dbConn)
             SQLGetData(stmt, 3, SQL_C_CHAR,
                        &foundRecord.nama, sizeof(foundRecord.nama), NULL);
             SQLGetData(stmt, 4, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_lahir = parseDate(dateBuff);
+                       foundRecord.tanggal_lahir, sizeof(foundRecord.tanggal_lahir), NULL);
             SQLGetData(stmt, 5, SQL_C_CHAR,
-                       dateBuff, sizeof(dateBuff), NULL);
-            foundRecord.tanggal_masuk = parseDate(dateBuff);
+                        foundRecord.tanggal_masuk, sizeof( foundRecord.tanggal_masuk), NULL);
             SQLGetData(stmt, 6, SQL_C_CHAR,
                        &foundRecord.no_hp, sizeof(foundRecord.no_hp), NULL);
             SQLGetData(stmt, 7, SQL_C_CHAR,
@@ -87,7 +84,6 @@ void findAllPengajar(data *datas, int *nPage, SQLHDBC *dbConn)
     while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
     {
         printf("Successfully fetched %lld rows\n", rowsFetched);
-        char dateBuff[50];
         int i = (int)rowsFetched;
         printf("awikwok %d\n", i);
 
@@ -98,11 +94,9 @@ void findAllPengajar(data *datas, int *nPage, SQLHDBC *dbConn)
         SQLGetData(stmt, 3, SQL_C_CHAR,
                    &datas->pengajars[i].nama, sizeof(datas->pengajars[i].nama), NULL);
         SQLGetData(stmt, 4, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->pengajars[rowsFetched].tanggal_lahir = parseDate(dateBuff);
+                   datas->pengajars[rowsFetched].tanggal_lahir, sizeof(datas->pengajars[rowsFetched].tanggal_lahir), NULL);
         SQLGetData(stmt, 5, SQL_C_CHAR,
-                   dateBuff, sizeof(dateBuff), NULL);
-        datas->pengajars[rowsFetched].tanggal_masuk = parseDate(dateBuff);
+                   datas->pengajars[rowsFetched].tanggal_masuk, sizeof(datas->pengajars[rowsFetched].tanggal_masuk), NULL);
         SQLGetData(stmt, 6, SQL_C_CHAR,
                    &datas->pengajars[i].no_hp, sizeof(datas->pengajars[i].no_hp), NULL);
         SQLGetData(stmt, 7, SQL_C_CHAR,
@@ -113,7 +107,7 @@ void findAllPengajar(data *datas, int *nPage, SQLHDBC *dbConn)
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
 
-QUERYSTATUS createPengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar newPengajar)
+QUERYSTATUS createPengajar(InputField fields[], SQLHDBC *dbConn)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;
@@ -121,12 +115,16 @@ QUERYSTATUS createPengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar ne
     SQLUSMALLINT rowStatus[100];
     char *dateBuff;
 
+    Pengajar newPengajar;
+    strcpy(newPengajar.nama,fields[1].value.text);
+    strcpy(newPengajar.tanggal_lahir,fields[2].value.text);
+    strcpy(newPengajar.no_hp,fields[3].value.text);
+    strcpy(newPengajar.password,fields[4].value.text);
+
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO pengajar (nama, tanggal_lahir, no_hp, password) VALUES (?,?,?,?)", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newPengajar.nama), 0, newPengajar.nama, 0, NULL);
-    dateBuff = parseDateToString(newPengajar.tanggal_lahir);
-    printf("date: %s\n", dateBuff);
-    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen("2028-10-20"), 0, "2028-10-20", 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(newPengajar.tanggal_lahir), 0, newPengajar.tanggal_lahir, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newPengajar.no_hp), 0, newPengajar.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newPengajar.password), 0, newPengajar.password, 0, NULL);
     ret = SQLExecute(stmt);
@@ -159,7 +157,6 @@ QUERYSTATUS updatedPengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar u
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"UPDATE pengajar SET nama = ?, tanggal_lahir = ?, no_hp = ?, password = ? WHERE id_pengajar = ?", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedPengajar.nama), 0, updatedPengajar.nama, 0, NULL);
-    dateBuff = parseDateToString(updatedPengajar.tanggal_lahir);
     SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_DATE, strlen(dateBuff), 0, dateBuff, 0, NULL);
     SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedPengajar.no_hp), 0, updatedPengajar.no_hp, 0, NULL);
     SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(updatedPengajar.password), 0, updatedPengajar.password, 0, NULL);
@@ -183,7 +180,7 @@ QUERYSTATUS updatedPengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar u
     }
 }
 
-QUERYSTATUS deletePengajar(data *datas, int *nPage, SQLHDBC *dbConn, Pengajar updatedPengajar)
+QUERYSTATUS deletePengajar(SQLHDBC *dbConn, Pengajar updatedPengajar)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;

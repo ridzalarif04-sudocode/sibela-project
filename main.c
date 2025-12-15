@@ -42,9 +42,17 @@ int main()
     defaultWindow.forms[0].fields[4] = (InputField){.label = "Password", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
     defaultWindow.forms[0].fields[5] = (InputField){.label = "Email", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
     defaultWindow.forms[0].fields[6] = (InputField){.label = "Submit", .type = BUTTONINPUT};
+    defaultWindow.forms[2].fields[1] = (InputField){.label = "Nama", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[2].fields[2] = (InputField){.label = "Tanggal Lahir", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[2].fields[3] = (InputField){.label = "No HP", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[2].fields[4] = (InputField){.label = "Password", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[2].fields[5] = (InputField){.label = "Submit", .type = BUTTONINPUT};
     defaultWindow.forms[0].nField = 6;
+    defaultWindow.forms[2].nField = 5;
     defaultWindow.forms[0].fieldPerPage = 4;
+    defaultWindow.forms[2].fieldPerPage = 5;
     defaultWindow.forms[0].func = createStaff;
+    defaultWindow.forms[2].func = createPengajar;
     // Image Member
     defaultWindow.members[0].image = LoadTexture("assets/images/member/rayyan.png");
     defaultWindow.members[1].image = LoadTexture("assets/images/member/rasya.png");
