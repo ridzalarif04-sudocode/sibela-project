@@ -1,0 +1,17 @@
+#ifndef MURIDHOME_MURID_CREATE_H
+#define MURIDHOME_MURID_CREATE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <unistd.h>
+#include "../../../../../libs/headers/raylib.h"
+#include "../../../../../model/window.h"
+#include "../../../../../libs/utils.h"
+#include "../../../../../components/header.h"
+#include "../../../../../data/murid.h"
+#include "../../../../../constants/color.h"
+
+void drawMuridCreate(windowModel *windowM);
+
+#endif
