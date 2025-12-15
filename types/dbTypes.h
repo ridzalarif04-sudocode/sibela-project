@@ -59,9 +59,9 @@ typedef struct
 typedef struct
 {
     int id_num;
-    char id_ruangan[6];
-    char lokasi[100];
-    char deskripsi[100];
+    char id_ruangan[7];
+    char lokasi[101];
+    char deskripsi[101];
 } Ruangan;
 
 typedef struct

@@ -43,6 +43,9 @@ void drawStaffHome(windowModel *windowM)
         case 2:
             drawPengajarRead(windowM);
             break;
+        case 3:
+            drawRuanganRead(windowM);
+            break;
         case 4:
             drawMapelRead(windowM);
             break;
@@ -60,6 +63,9 @@ void drawStaffHome(windowModel *windowM)
             break;
         case 2:
             drawPengajarCreate(windowM);
+            break;
+        case 3:
+            drawRuanganCreate(windowM);
             break;
         }
     }

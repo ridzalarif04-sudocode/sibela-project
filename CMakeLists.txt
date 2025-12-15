@@ -20,6 +20,9 @@ views/home/staffHome/components/pengajar/update.c
 views/home/staffHome/components/staff/create.c
 views/home/staffHome/components/staff/read.c
 views/home/staffHome/components/staff/update.c
+views/home/staffHome/components/ruangan/create.c
+views/home/staffHome/components/ruangan/read.c
+# views/home/staffHome/components/ruangan/update.c
 views/home/pengajarHome/pengajarHome.c
 views/home/muridHome/muridHome.c
 views/loginView.c

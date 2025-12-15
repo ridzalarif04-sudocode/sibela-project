@@ -10,8 +10,6 @@
 void findAllRuangan(data *datas, int *nPage, SQLHDBC *dbConn)
 {
 
-    if (datas->nRuangan > 0)
-        return;
 
     SQLHSTMT stmt;
     SQLRETURN ret;
@@ -32,7 +30,16 @@ void findAllRuangan(data *datas, int *nPage, SQLHDBC *dbConn)
     *nPage = (int)ceil((float)count / 10);
     printf("awikwok %d\n", *nPage);
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT * FROM ruangan", SQL_NTS);
+    int limit = 10;
+    int offset = (datas->page - 1) * limit;
+    *nPage = (int)ceil((float)count / limit);
+
+    SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT id_num, id_ruangan, lokasi, SUBSTRING(deskripsi, 1, 20) + IIF(LEN(deskripsi) >= 20,'...','') AS deskripsi FROM ruangan ORDER BY id_ruangan DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
+    ret = SQLExecute(stmt);
+
     while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
     {
         printf("Successfully fetched %lld rows\n", rowsFetched);
@@ -55,13 +62,19 @@ void findAllRuangan(data *datas, int *nPage, SQLHDBC *dbConn)
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
 
-QUERYSTATUS createRuangan(data *datas, int *nPage, SQLHDBC *dbConn, Ruangan newRuangan)
+QUERYSTATUS createRuangan(InputField fields[],SQLHDBC *dbConn)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;
     int count;
+
     SQLUSMALLINT rowStatus[100];
     char *dateBuff;
+
+    Ruangan newRuangan;
+
+    strcpy(newRuangan.lokasi, fields[1].value.text);
+    strcpy(newRuangan.deskripsi, fields[2].value.text);
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
     SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO ruangan (lokasi, deskripsi) VALUES (?,?)", SQL_NTS);
@@ -119,7 +132,7 @@ QUERYSTATUS updateRuangan(data *datas, int *nPage, SQLHDBC *dbConn, Ruangan upda
     }
 }
 
-QUERYSTATUS deleteRuangan (data *datas, int *nPage, SQLHDBC *dbConn, Ruangan uptadeRuangan)
+QUERYSTATUS deleteRuangan (SQLHDBC *dbConn, Ruangan uptadeRuangan)
 {
     SQLHSTMT stmt;
     SQLRETURN ret;

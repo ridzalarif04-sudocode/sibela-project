@@ -5,6 +5,7 @@
 #include "views/drawView.h"
 #include "data/staf.h"
 #include "data/mapel.h"
+#include "data/ruangan.h"
 #include "views/Loading.h"
 
 int main()
@@ -47,12 +48,18 @@ int main()
     defaultWindow.forms[2].fields[3] = (InputField){.label = "No HP", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
     defaultWindow.forms[2].fields[4] = (InputField){.label = "Password", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
     defaultWindow.forms[2].fields[5] = (InputField){.label = "Submit", .type = BUTTONINPUT};
+    defaultWindow.forms[3].fields[1] = (InputField){.label = "Lokasi", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[3].fields[2] = (InputField){.label = "Deskripsi", .type = TEXTINPUT, .value = (InputParams){.charLen = 0, .text = ""}};
+    defaultWindow.forms[3].fields[3] = (InputField){.label = "Submit", .type = BUTTONINPUT};
     defaultWindow.forms[0].nField = 6;
     defaultWindow.forms[2].nField = 5;
+    defaultWindow.forms[3].nField = 3;
     defaultWindow.forms[0].fieldPerPage = 4;
     defaultWindow.forms[2].fieldPerPage = 5;
+    defaultWindow.forms[3].fieldPerPage = 3;
     defaultWindow.forms[0].func = createStaff;
     defaultWindow.forms[2].func = createPengajar;
+    defaultWindow.forms[3].func = createRuangan;
     // Image Member
     defaultWindow.members[0].image = LoadTexture("assets/images/member/rayyan.png");
     defaultWindow.members[1].image = LoadTexture("assets/images/member/rasya.png");
@@ -61,6 +68,7 @@ int main()
     defaultWindow.members[4].image = LoadTexture("assets/images/member/nabilah.png");
     defaultWindow.dataFetchers.admin[0] = findAllStaff;
     defaultWindow.dataFetchers.admin[2] = findAllPengajar;
+    defaultWindow.dataFetchers.admin[3] = findAllRuangan;
     defaultWindow.dataFetchers.admin[4] = findAllMapel;
 
     // Logo Sibela

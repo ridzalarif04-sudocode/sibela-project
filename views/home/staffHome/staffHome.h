@@ -20,6 +20,9 @@
 #include "components/mapel/read.h"
 #include "components/mapel/create.h"
 #include "components/mapel/update.h"
+#include "components/ruangan/read.h"
+#include "components/ruangan/create.h"
+// #include "components/ruangan/update.h"
 
 void drawStaffHome(windowModel *windowM);
 
