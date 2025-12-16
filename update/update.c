@@ -59,48 +59,17 @@ void updateView(windowModel *windowM)
                 case KEY_RIGHT:
 
                     windowM->page++;
-                    windowM->curPos = windowM->page * windowM->forms[windowM->selectedPage].fieldPerPage - windowM->forms[windowM->selectedPage].fieldPerPage + 1;
+                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
                     break;
                 case KEY_LEFT:
                     windowM->page--;
-                    windowM->curPos = windowM->page * windowM->forms[windowM->selectedPage].fieldPerPage - windowM->forms[windowM->selectedPage].fieldPerPage + 1;
+                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
                     break;
                 default:
-                    switch (windowM->forms[windowM->selectedPage].fields[windowM->curPos].type)
-                    {
-                    case TEXTINPUT:
-                        ch = GetCharPressed();
-                        while (ch > 0)
-                        {
-                            if ((ch >= 32) && (ch <= 125) && (windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen < 100))
-                            {
-                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen] = (char)ch;
-                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen + 1] = '\0';
-                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen++;
-                            }
+                    int selectedPage = windowM->selectedPage;
+                    int curPos = windowM->curPos;
+                    handleInput(&ch, &windowM->forms.staffPage[selectedPage].fields[curPos].value.charLen, windowM->forms.staffPage[selectedPage].fields[curPos].value.text, windowM->forms.staffPage[selectedPage].fields[curPos].type, 100, windowM->forms.staffPage[selectedPage].func, windowM->forms.staffPage[selectedPage].fields, windowM->dataFetchers.admin[selectedPage], windowM);
 
-                            ch = GetCharPressed();
-                        }
-
-                        if (IsKeyPressed(KEY_BACKSPACE))
-                        {
-                            windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen--;
-                            if (windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen < 0)
-                                windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen = 0;
-                            windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.text[windowM->forms[windowM->selectedPage].fields[windowM->curPos].value.charLen] = '\0';
-                        }
-                        break;
-                    case BUTTONINPUT:
-                        switch (ch)
-                        {
-                        case KEY_ENTER:
-                            windowM->forms[windowM->selectedPage].func(windowM->forms[windowM->selectedPage].fields, windowM->dbConn);
-                            windowM->dataFetchers.admin[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
-                            windowM->activeSubWindow = READ;
-                            break;
-                        }
-                        break;
-                    }
                     break;
                 }
             }
@@ -235,48 +204,10 @@ void updateView(windowModel *windowM)
             switch (windowM->loginData.activeInput)
             {
             case 0:
-                ch = GetCharPressed();
-                while (ch > 0)
-                {
-                    if ((ch >= 32) && (ch <= 125) && (windowM->loginData.email.charLen < 100))
-                    {
-                        windowM->loginData.email.text[windowM->loginData.email.charLen] = (char)ch;
-                        windowM->loginData.email.text[windowM->loginData.email.charLen + 1] = '\0'; // Add null terminator at the end of the string
-                        windowM->loginData.email.charLen++;
-                    }
-
-                    ch = GetCharPressed(); // Check next character in the queue
-                }
-
-                if (IsKeyPressed(KEY_BACKSPACE))
-                {
-                    windowM->loginData.email.charLen--;
-                    if (windowM->loginData.email.charLen < 0)
-                        windowM->loginData.email.charLen = 0;
-                    windowM->loginData.email.text[windowM->loginData.email.charLen] = '\0';
-                }
+                handleInput(&ch, &windowM->loginData.email.charLen, windowM->loginData.email.text, TEXTINPUT, 100, NULL, NULL, NULL, windowM);
                 break;
             case 1:
-                ch = GetCharPressed();
-                while (ch > 0)
-                {
-                    if ((ch >= 32) && (ch <= 125) && (windowM->loginData.password.charLen < 100))
-                    {
-                        windowM->loginData.password.text[windowM->loginData.password.charLen] = (char)ch;
-                        windowM->loginData.password.text[windowM->loginData.password.charLen + 1] = '\0'; // Add null terminator at the end of the string
-                        windowM->loginData.password.charLen++;
-                    }
-
-                    ch = GetCharPressed(); // Check next character in the queue
-                }
-
-                if (IsKeyPressed(KEY_BACKSPACE))
-                {
-                    windowM->loginData.password.charLen--;
-                    if (windowM->loginData.password.charLen < 0)
-                        windowM->loginData.password.charLen = 0;
-                    windowM->loginData.password.text[windowM->loginData.password.charLen] = '\0';
-                }
+                handleInput(&ch, &windowM->loginData.password.charLen, windowM->loginData.password.text, TEXTINPUT, 100, NULL, NULL, NULL, windowM);
                 break;
             case 2:
                 switch (ch)
@@ -308,49 +239,10 @@ void updateView(windowModel *windowM)
             switch (windowM->loginData.activeInput)
             {
             case 0:
-                ch = GetCharPressed();
-                printf("char: %d\n", ch);
-                while (ch > 0)
-                {
-                    if ((ch >= '0') && (ch <= '9') && (windowM->loginData.phoneNumber.charLen < 15))
-                    {
-                        windowM->loginData.phoneNumber.text[windowM->loginData.phoneNumber.charLen] = (char)ch;
-                        windowM->loginData.phoneNumber.text[windowM->loginData.phoneNumber.charLen + 1] = '\0'; // Add null terminator at the end of the string
-                        windowM->loginData.phoneNumber.charLen++;
-                    }
-
-                    ch = GetCharPressed(); // Check next character in the queue
-                }
-
-                if (IsKeyPressed(KEY_BACKSPACE))
-                {
-                    windowM->loginData.phoneNumber.charLen--;
-                    if (windowM->loginData.phoneNumber.charLen < 0)
-                        windowM->loginData.phoneNumber.charLen = 0;
-                    windowM->loginData.phoneNumber.text[windowM->loginData.phoneNumber.charLen] = '\0';
-                }
+                handleInput(&ch, &windowM->loginData.phoneNumber.charLen, windowM->loginData.phoneNumber.text, NUMERICINPUT, 15, NULL, NULL, NULL, windowM);
                 break;
             case 1:
-                ch = GetCharPressed();
-                while (ch > 0)
-                {
-                    if ((ch >= 32) && (ch <= 125) && (windowM->loginData.password.charLen < 100))
-                    {
-                        windowM->loginData.password.text[windowM->loginData.password.charLen] = (char)ch;
-                        windowM->loginData.password.text[windowM->loginData.password.charLen + 1] = '\0'; // Add null terminator at the end of the string
-                        windowM->loginData.password.charLen++;
-                    }
-
-                    ch = GetCharPressed(); // Check next character in the queue
-                }
-
-                if (IsKeyPressed(KEY_BACKSPACE))
-                {
-                    windowM->loginData.password.charLen--;
-                    if (windowM->loginData.password.charLen < 0)
-                        windowM->loginData.password.charLen = 0;
-                    windowM->loginData.password.text[windowM->loginData.password.charLen] = '\0';
-                }
+                handleInput(&ch, &windowM->loginData.password.charLen, windowM->loginData.password.text, TEXTINPUT, 100, NULL, NULL, NULL, windowM);
                 break;
             case 2:
                 switch (ch)

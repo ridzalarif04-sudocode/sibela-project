@@ -52,7 +52,7 @@
 // }
 void LoadingScreen(windowModel *windowM, float progress)
 {
-    int screenWidth  = GetScreenWidth();
+    int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
     static Texture2D logo = {0};
@@ -63,19 +63,17 @@ void LoadingScreen(windowModel *windowM, float progress)
     int alphaGlow = (int)(glow * 120.0f);
 
     Vector2 logoPos = {
-        (screenWidth  - logo.width)  / 2.0f + 40,
-        (screenHeight / 2.0f) - logo.height - 40
-    };
+        (screenWidth - logo.width) / 2.0f + 40,
+        (screenHeight / 2.0f) - logo.height - 40};
 
     DrawTexture(logo, logoPos.x, logoPos.y, WHITE);
 
-    int barWidth  = 600;
+    int barWidth = 600;
     int barHeight = 22;
 
     Vector2 barPos = {
         (screenWidth - barWidth) / 2.0f,
-        logoPos.y + logo.height + 70
-    };
+        logoPos.y + logo.height + 70};
 
     DrawRectangle(barPos.x, barPos.y, barWidth, barHeight, Fade(BLUE, 0.25f));
 
@@ -88,5 +86,5 @@ void LoadingScreen(windowModel *windowM, float progress)
     char persen[16];
     sprintf(persen, "%d%%", (int)(progress * 100));
 
-    DrawTextEx(*windowM->fontStyle.medium,persen,(Vector2){ barPos.x + barWidth + 20, barPos.y - 4 },32,1,BLUE);
+    DrawTextEx(windowM->fontStyle.medium, persen, (Vector2){barPos.x + barWidth + 20, barPos.y - 4}, 32, 1, BLUE);
 }

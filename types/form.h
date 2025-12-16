@@ -10,7 +10,9 @@ typedef struct
 typedef enum
 {
     TEXTINPUT,
-    BUTTONINPUT
+    BUTTONINPUT,
+    SHORTINPUT,
+    NUMERICINPUT
 } InputType;
 
 typedef struct

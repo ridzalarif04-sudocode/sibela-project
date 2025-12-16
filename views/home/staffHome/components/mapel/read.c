@@ -9,7 +9,7 @@ void drawMapelRead(windowModel *windowM)
     int start_y = 1080 / 2 - 300;
     int padding = 5;
     int font_size = 32;
-    DrawTextEx(*windowM->fontStyle.regular, "DATA MAPEL",
+    DrawTextEx(windowM->fontStyle.regular, "DATA MAPEL",
                (Vector2){start_x + 390,
                          start_y - 120},
                64, 0,
@@ -24,12 +24,12 @@ void drawMapelRead(windowModel *windowM)
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, "id",
+    DrawTextEx(windowM->fontStyle.regular, "id",
                (Vector2){start_x + 0 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "Nama Mapel",
+    DrawTextEx(windowM->fontStyle.regular, "Nama Mapel",
                (Vector2){start_x + 1 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
@@ -50,24 +50,24 @@ void drawMapelRead(windowModel *windowM)
             }
             DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         }
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.Mapels[row].id_mapel,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.Mapels[row].id_mapel,
                    (Vector2){start_x + 0 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.Mapels[row].nama_mapel,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.Mapels[row].nama_mapel,
                    (Vector2){start_x + 1 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
+    DrawTextEx(windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
                (Vector2){300 + (1620 / 2 - 30),
                          1000},
                40, 0,
                SIBELAWHITE);
 
-               if (windowM->isModalShown)
+    if (windowM->isModalShown)
     {
         int res = GuiMessageBox((Rectangle){.height = 200, .width = 300, .x = 1920 / 2 - 150, .y = 1080 / 2 - 300}, "Delete Mapel?", TextFormat("Apakah anda ingin menghapus mapel %s?", windowM->focusedData.mapel.id_mapel), "Batal;Hapus!");
 

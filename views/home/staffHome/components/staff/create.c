@@ -9,36 +9,37 @@ void drawStaffCreate(windowModel *windowM)
     int start_y = 1080 / 2 - 300;
     int padding = 5;
     int font_size = 32;
-    DrawTextEx(*windowM->fontStyle.regular, "CREATE STAFF",
+    DrawTextEx(windowM->fontStyle.regular, "CREATE STAFF",
                (Vector2){start_x + 390,
                          start_y - 120},
                64, 0,
                SIBELAWHITE);
 
-    windowM->forms[windowM->selectedPage].totalPages = (int)ceilf((float)windowM->forms[windowM->selectedPage].nField / windowM->forms[windowM->selectedPage].fieldPerPage);
-    windowM->forms[windowM->selectedPage].offset = (windowM->page - 1) * windowM->forms[windowM->selectedPage].fieldPerPage + 1;
-    windowM->forms[windowM->selectedPage].lastIndex = windowM->forms[windowM->selectedPage].offset + (windowM->forms[windowM->selectedPage].fieldPerPage - 1) > windowM->forms[windowM->selectedPage].nField ? windowM->forms[windowM->selectedPage].nField : windowM->forms[windowM->selectedPage].offset + (windowM->forms[windowM->selectedPage].fieldPerPage - 1);
+    windowM->forms.staffPage[windowM->selectedPage].totalPages = (int)ceilf((float)windowM->forms.staffPage[windowM->selectedPage].nField / windowM->forms.staffPage[windowM->selectedPage].fieldPerPage);
+    windowM->forms.staffPage[windowM->selectedPage].offset = (windowM->page - 1) * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
+    windowM->forms.staffPage[windowM->selectedPage].lastIndex = windowM->forms.staffPage[windowM->selectedPage].offset + (windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - 1) > windowM->forms.staffPage[windowM->selectedPage].nField ? windowM->forms.staffPage[windowM->selectedPage].nField : windowM->forms.staffPage[windowM->selectedPage].offset + (windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - 1);
 
-    for (int i = windowM->forms[windowM->selectedPage].offset; i <= windowM->forms[windowM->selectedPage].lastIndex; i++)
+    for (int i = windowM->forms.staffPage[windowM->selectedPage].offset; i <= windowM->forms.staffPage[windowM->selectedPage].lastIndex; i++)
     {
         Rectangle textBox = {
             1920 / 2.0f - 300,
-            start_y + 100 + (i - 1 - windowM->forms[windowM->selectedPage].offset) * 150,
+            start_y + 100 + (i - 1 - windowM->forms.staffPage[windowM->selectedPage].offset) * 150,
             600,
             63,
         };
         Rectangle buttonBox = {
             1920 / 2.0f - 80,
-            start_y + 100 + (i - 1 - windowM->forms[windowM->selectedPage].offset) * 150,
+            start_y + 100 + (i - 1 - windowM->forms.staffPage[windowM->selectedPage].offset) * 150,
             160,
             67,
         };
-        switch (windowM->forms[windowM->selectedPage].fields[i].type)
+        switch (windowM->forms.staffPage[windowM->selectedPage].fields[i].type)
         {
+        case NUMERICINPUT:
         case TEXTINPUT:
-            DrawTextEx(*windowM->fontStyle.medium, windowM->forms[windowM->selectedPage].fields[i].label, (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
+            DrawTextEx(windowM->fontStyle.medium, windowM->forms.staffPage[windowM->selectedPage].fields[i].label, (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
             DrawRectangleRoundedLines(textBox, 0.3, 0, windowM->curPos == i ? PRIMARY : SIBELAWHITE);
-            DrawTextEx(*windowM->fontStyle.regular, windowM->forms[windowM->selectedPage].fields[i].value.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
+            DrawTextEx(windowM->fontStyle.regular, windowM->forms.staffPage[windowM->selectedPage].fields[i].value.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
             break;
 
         case BUTTONINPUT:
@@ -48,7 +49,7 @@ void drawStaffCreate(windowModel *windowM)
             }
             else
                 DrawRectangleRoundedLines(buttonBox, 0.3, 0, SIBELAWHITE);
-            DrawTextEx(*windowM->fontStyle.medium, windowM->forms[windowM->selectedPage].fields[i].label, (Vector2){(int)buttonBox.x + MeasureTextEx(*windowM->fontStyle.medium, windowM->forms[windowM->selectedPage].fields[i].label, 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(*windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
+            DrawTextEx(windowM->fontStyle.medium, windowM->forms.staffPage[windowM->selectedPage].fields[i].label, (Vector2){(int)buttonBox.x + MeasureTextEx(windowM->fontStyle.medium, windowM->forms.staffPage[windowM->selectedPage].fields[i].label, 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
             break;
         }
     }

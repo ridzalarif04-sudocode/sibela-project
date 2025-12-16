@@ -13,13 +13,13 @@ void drawLandingPage(windowModel *windowM)
 
     for (int i = 0; i < 4; i++)
     {
-        Vector2 TextSize = MeasureTextEx(*windowM->fontStyle.regular, windowM->navigation.landingPage[i].nama, 40, 0);
+        Vector2 TextSize = MeasureTextEx(windowM->fontStyle.regular, windowM->navigation.landingPage[i].nama, 40, 0);
         Vector2 Position = {.x = box.x + box.width / 2 - TextSize.x / 2, .y = box.y + 24 + i * gap};
         Rectangle highlightBox = {.height = TextSize.y + 8, .width = TextSize.x + 10, .x = Position.x - 5, .y = Position.y - 4};
         if (windowM->curPos == i)
         {
             DrawRectangleRounded(highlightBox, 0.35, 0, PRIMARY);
         }
-        DrawTextEx(*windowM->fontStyle.regular, windowM->navigation.landingPage[i].nama, Position, 40, 0, SIBELAWHITE);
+        DrawTextEx(windowM->fontStyle.regular, windowM->navigation.landingPage[i].nama, Position, 40, 0, SIBELAWHITE);
     }
 }

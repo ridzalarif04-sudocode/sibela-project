@@ -9,6 +9,7 @@
 #include "../model/window.h"
 #include "../libs/utils.h"
 #include "../libs/login.h"
+#include "../libs/handleInput.h"
 
 void updateView(windowModel *windowM);
 

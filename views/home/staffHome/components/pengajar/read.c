@@ -9,7 +9,7 @@ void drawPengajarRead(windowModel *windowM)
     int start_y = 1080 / 2 - 300;
     int padding = 5;
     int font_size = 32;
-    DrawTextEx(*windowM->fontStyle.regular, "DATA PENGAJAR",
+    DrawTextEx(windowM->fontStyle.regular, "DATA PENGAJAR",
                (Vector2){start_x + 390,
                          start_y - 120},
                64, 0,
@@ -24,22 +24,22 @@ void drawPengajarRead(windowModel *windowM)
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, "id",
+    DrawTextEx(windowM->fontStyle.regular, "id",
                (Vector2){start_x + 0 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "Nama",
+    DrawTextEx(windowM->fontStyle.regular, "Nama",
                (Vector2){start_x + 1 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "No. Hp",
+    DrawTextEx(windowM->fontStyle.regular, "No. Hp",
                (Vector2){start_x + 2 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "Password",
+    DrawTextEx(windowM->fontStyle.regular, "Password",
                (Vector2){start_x + 3 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
@@ -60,28 +60,28 @@ void drawPengajarRead(windowModel *windowM)
             }
             DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         }
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.pengajars[row].id_pengajar,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.pengajars[row].id_pengajar,
                    (Vector2){start_x + 0 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.pengajars[row].nama,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.pengajars[row].nama,
                    (Vector2){start_x + 1 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.pengajars[row].no_hp,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.pengajars[row].no_hp,
                    (Vector2){start_x + 2 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.pengajars[row].password,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.pengajars[row].password,
                    (Vector2){start_x + 3 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
+    DrawTextEx(windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
                (Vector2){300 + (1620 / 2 - 30),
                          1000},
                40, 0,

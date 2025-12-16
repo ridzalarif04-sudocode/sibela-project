@@ -7,7 +7,9 @@ set(PACKAGES
 libs/utils.c
 components/header.c
 libs/login.c
+libs/handleInput.c
 model/model.c
+model/windows.c
 update/update.c
 views/drawView.c
 views/home/staffHome/staffHome.c

@@ -28,10 +28,10 @@ void drawMemberPage(windowModel *windowM)
     DrawRectangleRoundedLinesEx(boundingArea, 0.2, 0, 1, SIBELAWHITE);
 
     DrawTextureEx(currMember.image, (Vector2){boundingArea.x + 54, boundingArea.y + 80}, 0, 0.7, WHITE);
-    DrawTextEx(*windowM->fontStyle.medium, currMember.nama, (Vector2){infoStartX, infoStartY}, 50, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, nim, (Vector2){infoStartX, infoStartY + 52}, 32, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, julukan, (Vector2){infoStartX, infoStartY + 82}, 32, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, domisili, (Vector2){infoStartX, infoStartY + 112}, 32, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, tanggalLahir, (Vector2){infoStartX, infoStartY + 144}, 32, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, page, (Vector2){1920 / 2 - MeasureTextEx(*windowM->fontStyle.regular, page, 32, 0).x / 2, 1080 - 70}, 32, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, currMember.nama, (Vector2){infoStartX, infoStartY}, 50, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, nim, (Vector2){infoStartX, infoStartY + 52}, 32, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, julukan, (Vector2){infoStartX, infoStartY + 82}, 32, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, domisili, (Vector2){infoStartX, infoStartY + 112}, 32, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, tanggalLahir, (Vector2){infoStartX, infoStartY + 144}, 32, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, page, (Vector2){1920 / 2 - MeasureTextEx(windowM->fontStyle.regular, page, 32, 0).x / 2, 1080 - 70}, 32, 0, SIBELAWHITE);
 }

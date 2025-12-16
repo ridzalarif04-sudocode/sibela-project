@@ -9,7 +9,7 @@ void drawRuanganRead(windowModel *windowM)
     int start_y = 1080 / 2 - 300;
     int padding = 5;
     int font_size = 32;
-    DrawTextEx(*windowM->fontStyle.regular, "DATA RUANGAN",
+    DrawTextEx(windowM->fontStyle.regular, "DATA RUANGAN",
                (Vector2){start_x + 390,
                          start_y - 120},
                64, 0,
@@ -24,17 +24,17 @@ void drawRuanganRead(windowModel *windowM)
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, "id",
+    DrawTextEx(windowM->fontStyle.regular, "id",
                (Vector2){start_x + 0 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "Lokasi",
+    DrawTextEx(windowM->fontStyle.regular, "Lokasi",
                (Vector2){start_x + 1 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
                SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, "Deskripsi",
+    DrawTextEx(windowM->fontStyle.regular, "Deskripsi",
                (Vector2){start_x + 2 * cell_width + padding,
                          start_y - cell_height + padding},
                font_size, 0,
@@ -56,23 +56,23 @@ void drawRuanganRead(windowModel *windowM)
             }
             DrawRectangleLinesEx(cellRect, 1, SIBELAWHITE);
         }
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.ruangans[row].id_ruangan,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.ruangans[row].id_ruangan,
                    (Vector2){start_x + 0 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.ruangans[row].lokasi,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.ruangans[row].lokasi,
                    (Vector2){start_x + 1 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
-        DrawTextEx(*windowM->fontStyle.regular, windowM->datas.ruangans[row].deskripsi,
+        DrawTextEx(windowM->fontStyle.regular, windowM->datas.ruangans[row].deskripsi,
                    (Vector2){start_x + 2 * cell_width + padding,
                              start_y + row * cell_height + padding},
                    font_size, 0,
                    SIBELAWHITE);
     }
-    DrawTextEx(*windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
+    DrawTextEx(windowM->fontStyle.regular, TextFormat("Halaman %d dari %d", windowM->datas.page, windowM->datas.totalPages),
                (Vector2){300 + (1620 / 2 - 30),
                          1000},
                40, 0,

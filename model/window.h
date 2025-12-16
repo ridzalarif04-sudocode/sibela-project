@@ -5,6 +5,11 @@
 #include "../types/dbTypes.h"
 #include "../types/form.h"
 #include "../libs/headers/raylib.h"
+#include "../data/staf.h"
+#include "../data/mapel.h"
+#include "../data/ruangan.h"
+#include "../data/murid.h"
+#include "../data/pengajar.h"
 
 typedef enum
 {
@@ -48,9 +53,9 @@ typedef struct
 
 typedef struct
 {
-    Font *regular;
-    Font *medium;
-    Font *mediumItalic;
+    Font regular;
+    Font medium;
+    Font mediumItalic;
 } FontStyles;
 
 typedef struct
@@ -103,6 +108,12 @@ typedef struct
 
 typedef struct
 {
+    FORM staffPage[10];
+    FORM pengajarPage[10];
+} FORMBYPAGE;
+
+typedef struct
+{
     WINDOWS currWindow;
     int shouldClose;
     int curPos;
@@ -118,7 +129,7 @@ typedef struct
     Member members[5];
     data datas;
     int page;
-    FORM forms[10];
+    FORMBYPAGE forms;
     PageNav navigation;
     user authUser;
     fetcher dataFetchers;
@@ -127,5 +138,10 @@ typedef struct
     float loadingTime;
     float progress;
 } windowModel;
+
+void initForm(windowModel *windowM);
+void initAssets(windowModel *windowM);
+void initWindow(windowModel *windowM);
+void unloadAssets(windowModel *windowM);
 
 #endif

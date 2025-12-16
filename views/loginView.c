@@ -24,12 +24,12 @@ void drawStaffLogin(windowModel *windowM)
         160,
         67,
     };
-    DrawTextEx(*windowM->fontStyle.medium, "Email", (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "Email", (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
     DrawRectangleRoundedLines(textBox, 0.3, 0, windowM->loginData.activeInput == 0 ? PRIMARY : SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, windowM->loginData.email.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.medium, "Password", (Vector2){(int)textBoxPass.x, (int)textBoxPass.y - 44}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, windowM->loginData.email.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "Password", (Vector2){(int)textBoxPass.x, (int)textBoxPass.y - 44}, 40, 0, SIBELAWHITE);
     DrawRectangleRoundedLines(textBoxPass, 0.3, 0, windowM->loginData.activeInput == 1 ? PRIMARY : SIBELAWHITE);
-    // DrawTextEx(*windowM->fontStyle.regular, windowM->loginData.password.text, (Vector2){(int)textBoxPass.x + 5, (int)textBoxPass.y + 8}, 40, 0, SIBELAWHITE);
+    // DrawTextEx(windowM->fontStyle.regular, windowM->loginData.password.text, (Vector2){(int)textBoxPass.x + 5, (int)textBoxPass.y + 8}, 40, 0, SIBELAWHITE);
     for (int i = 0; i < windowM->loginData.password.charLen; i++)
     {
         DrawCircle((int)textBoxPass.x + 16 + i * 28, (int)textBoxPass.y + textBox.height / 2, 12, SIBELAWHITE);
@@ -40,7 +40,7 @@ void drawStaffLogin(windowModel *windowM)
     }
     else
         DrawRectangleRoundedLines(buttonBox, 0.3, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.medium, "Login", (Vector2){(int)buttonBox.x + MeasureTextEx(*windowM->fontStyle.medium, "Login", 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(*windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "Login", (Vector2){(int)buttonBox.x + MeasureTextEx(windowM->fontStyle.medium, "Login", 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
 }
 
 void drawMuridTeacherLogin(windowModel *windowM)
@@ -67,12 +67,12 @@ void drawMuridTeacherLogin(windowModel *windowM)
         160,
         67,
     };
-    DrawTextEx(*windowM->fontStyle.medium, "No. Telp", (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "No. Telp", (Vector2){(int)textBox.x, (int)textBox.y - 44}, 40, 0, SIBELAWHITE);
     DrawRectangleRoundedLines(textBox, 0.3, 0, windowM->loginData.activeInput == 0 ? PRIMARY : SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.regular, windowM->loginData.phoneNumber.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.medium, "Password", (Vector2){(int)textBoxPass.x, (int)textBoxPass.y - 44}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.regular, windowM->loginData.phoneNumber.text, (Vector2){(int)textBox.x + 5, (int)textBox.y + 8}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "Password", (Vector2){(int)textBoxPass.x, (int)textBoxPass.y - 44}, 40, 0, SIBELAWHITE);
     DrawRectangleRoundedLines(textBoxPass, 0.3, 0, windowM->loginData.activeInput == 1 ? PRIMARY : SIBELAWHITE);
-    // DrawTextEx(*windowM->fontStyle.regular, windowM->loginData.password.text, (Vector2){(int)textBoxPass.x + 5, (int)textBoxPass.y + 8}, 40, 0, SIBELAWHITE);
+    // DrawTextEx(windowM->fontStyle.regular, windowM->loginData.password.text, (Vector2){(int)textBoxPass.x + 5, (int)textBoxPass.y + 8}, 40, 0, SIBELAWHITE);
     for (int i = 0; i < windowM->loginData.password.charLen; i++)
     {
         DrawCircle((int)textBoxPass.x + 16 + i * 28, (int)textBoxPass.y + textBox.height / 2, 12, SIBELAWHITE);
@@ -83,5 +83,5 @@ void drawMuridTeacherLogin(windowModel *windowM)
     }
     else
         DrawRectangleRoundedLines(buttonBox, 0.3, 0, SIBELAWHITE);
-    DrawTextEx(*windowM->fontStyle.medium, "Login", (Vector2){(int)buttonBox.x + MeasureTextEx(*windowM->fontStyle.medium, "Login", 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(*windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
+    DrawTextEx(windowM->fontStyle.medium, "Login", (Vector2){(int)buttonBox.x + MeasureTextEx(windowM->fontStyle.medium, "Login", 40, 0).x / 2, (int)buttonBox.y + MeasureTextEx(windowM->fontStyle.medium, "Login", 40, 0).y / 2 - 8}, 40, 0, SIBELAWHITE);
 }
