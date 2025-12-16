@@ -81,6 +81,15 @@ typedef struct
     char nama_mapel[101];
 } Mapel;
 
+typedef struct
+{
+    int id_num;
+    char id_materi[7];
+    char id_mapel[7];
+    char judul_materi[101];
+    char isi_materi[256];
+} Materi;
+
 // typedef struct
 //     {
 //         SQLINTEGER id_num;

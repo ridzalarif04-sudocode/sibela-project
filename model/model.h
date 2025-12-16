@@ -18,6 +18,8 @@ typedef struct
     SQLSMALLINT nRuangan;
     Mapel Mapels[100];
     SQLSMALLINT nMapel;
+    Materi Materis[100];
+    SQLSMALLINT nMateri;
     int page;
     int totalPages;
 } data;

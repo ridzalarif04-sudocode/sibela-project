@@ -28,6 +28,8 @@ void updateView(windowModel *windowM)
     case KEY_F2:
         windowM->currWindow = STAFHOME;
         break;
+    case KEY_F3:
+        windowM->currWindow = PENGAJARHOME;
     }
     switch (windowM->currWindow)
     {
