@@ -98,11 +98,11 @@ void drawJadwalRead(windowModel *windowM)
                SIBELAWHITE);
     if (windowM->isModalShown)
     {
-        int res = GuiMessageBox((Rectangle){.height = 200, .width = 300, .x = 1920 / 2 - 150, .y = 1080 / 2 - 300}, "Delete Murid?", TextFormat("Apakah anda ingin menghapus murid %s?", windowM->focusedData.murid.id_murid), "Batal;Hapus!");
+        int res = GuiMessageBox((Rectangle){.height = 200, .width = 300, .x = 1920 / 2 - 150, .y = 1080 / 2 - 300}, "Delete Jadwal?", TextFormat("Apakah anda ingin menghapus Jadwal %s?", windowM->focusedData.jadwal.id_pertemuan), "Batal;Hapus!");
 
         if (res == 2)
         {
-            // deleteMurid(windowM->dbConn, windowM->focusedData.murid);
+            deleteJadwalPertemuan(windowM->dbConn, windowM->focusedData.jadwal);
             windowM->dataFetchers.staffPage[windowM->selectedPage](&windowM->datas, &windowM->datas.totalPages, windowM->dbConn);
             windowM->isModalShown = 0;
         }

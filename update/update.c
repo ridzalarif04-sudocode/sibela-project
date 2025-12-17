@@ -53,7 +53,6 @@ void updateView(windowModel *windowM)
             break;
 
         default:
-
             if (!windowM->cursorEnabled && (windowM->activeSubWindow == CREATE || windowM->activeSubWindow == UPDATE))
             {
                 switch (ch)
@@ -88,7 +87,7 @@ void updateView(windowModel *windowM)
                     if (ch == KEY_ENTER && (windowM->forms.staffPage[windowM->selectedPage].fields[windowM->curPos].type == CUSTOMMODAL || windowM->forms.staffPage[windowM->selectedPage].fields[windowM->curPos].type == CUSTOMMODALMULTI) && windowM->forms.staffPage[windowM->selectedPage].selectedField == -1)
                     {
                         windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos].page = 1;
-                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos].nMultiSelected = 0;
+
                         windowM->forms.staffPage[windowM->selectedPage].optionFetcher[windowM->curPos](&windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos], windowM->dbConn);
                         windowM->forms.staffPage[windowM->selectedPage].selectedField = windowM->curPos;
                         windowM->curPos = 0;
@@ -129,6 +128,10 @@ void updateView(windowModel *windowM)
                     windowM->forms.staffPage[windowM->selectedPage].fields[1].value.charLen = strlen(windowM->authUser.id);
                     windowM->activeSubWindow = CREATE;
                     windowM->page = 1;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        windowM->selectByPage.staffPage[windowM->selectedPage][i].nMultiSelected = 0;
+                    }
                     windowM->curPos = 1;
                     break;
                 case KEY_RIGHT:
@@ -178,6 +181,15 @@ void updateView(windowModel *windowM)
                     case MAPEL:
                         copyStringData(windowM->focusedData.mapel.id_mapel, &windowM->forms.staffPage[MAPEL].fields[0].value);
                         copyStringData(windowM->focusedData.mapel.nama_mapel, &windowM->forms.staffPage[MAPEL].fields[1].value);
+                        break;
+                    case JADWAL:
+                        copyStringData(windowM->focusedData.jadwal.id_pertemuan, &windowM->forms.staffPage[JADWAL].fields[0].value);
+                        copyStringData(windowM->focusedData.jadwal.id_staff, &windowM->forms.staffPage[JADWAL].fields[1].value);
+                        copySelectData(windowM->focusedData.jadwal.nama_pengajar, windowM->focusedData.jadwal.id_pengajar, &windowM->selectByPage.staffPage[JADWAL][2].selected);
+                        copySelectData(windowM->focusedData.jadwal.lokasi, windowM->focusedData.jadwal.id_ruangan, &windowM->selectByPage.staffPage[JADWAL][3].selected);
+                        copySelectData(windowM->focusedData.jadwal.judul_materi, windowM->focusedData.jadwal.id_materi, &windowM->selectByPage.staffPage[JADWAL][4].selected);
+                        copyStringData(windowM->focusedData.jadwal.waktu, &windowM->forms.staffPage[JADWAL].fields[5].value);
+                        findAllSelectedSiswaByPertemuanID(windowM->focusedData.jadwal.id_pertemuan, &windowM->selectByPage.staffPage[JADWAL][6], windowM->dbConn);
                         break;
                     }
                     strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[1].value.text, windowM->authUser.id);

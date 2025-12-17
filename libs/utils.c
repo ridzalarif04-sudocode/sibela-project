@@ -51,6 +51,12 @@ void copyStringData(char src[], InputParams *dest)
     dest->charLen = strlen(src);
 }
 
+void copySelectData(char label[], char value[], SelectProp *dest)
+{
+    strcpy(dest->label, label);
+    strcpy(dest->value, value);
+}
+
 char *intToString(int i)
 {
     char *buff;

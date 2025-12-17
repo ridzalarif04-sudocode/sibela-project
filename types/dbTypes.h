@@ -77,6 +77,10 @@ typedef struct
     char nama_pengajar[101];
     char lokasi[101];
     char judul_materi[101];
+    char id_staff[9];
+    char id_pengajar[8];
+    char id_ruangan[7];
+    char id_materi[7];
     int jumlah_murid;
     char waktu[20];
 } JadwalPertemuanWithDetails;

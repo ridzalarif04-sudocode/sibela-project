@@ -14,5 +14,6 @@
 
 QUERYSTATUS createJadwalMurid(InputParams input, char id_pert[], SQLHDBC *dbConn);
 QUERYSTATUS deleteteJadwalMuridByPertemuanID(char id_pert[], SQLHDBC *dbConn);
+void findAllSelectedSiswaByPertemuanID(char id_pert[], Select *fields, SQLHDBC *dbConn);
 
 #endif
