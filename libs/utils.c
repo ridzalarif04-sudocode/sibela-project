@@ -67,3 +67,14 @@ void clearFields(InputField fields[])
         strcpy(fields[i].value.text, "");
     }
 }
+
+int isOptionInMultiSelected(SelectProp target, SelectProp domain[], int nDomain)
+{
+    for (int i = 0; i < nDomain; i++)
+    {
+        if (strcmp(domain[i].value, target.value) == 0)
+            return 1;
+    }
+
+    return 0;
+}

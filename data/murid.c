@@ -111,6 +111,51 @@ void findAllMurid(data *datas, int *nPage, SQLHDBC *dbConn)
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
 
+void findAllMuridSelect(Select *selectObject, SQLHDBC *dbConn)
+{
+    SQLHSTMT stmt;
+    SQLRETURN ret;
+    int count;
+    SQLUSMALLINT rowStatus[100];
+    char query[50];
+
+    SQLLEN rowsFetched = 0;
+    SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
+    ret = SQLExecDirect(stmt, (SQLCHAR *)"SELECT COUNT(*) AS row_count FROM murid", SQL_NTS);
+    if (SQL_SUCCEEDED(ret))
+    {
+        if (SQL_SUCCEEDED(SQLFetch(stmt)))
+        {
+            SQLGetData(stmt, 1, SQL_C_LONG, &count, 0, NULL);
+        }
+    }
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    int limit = 10;
+    int offset = (selectObject->page - 1) * limit;
+    selectObject->nPage = (int)ceil((float)count / limit);
+    sprintf(query, "%%%s%%", selectObject->searchQuery);
+
+    SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT * FROM murid ORDER BY nama ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    // SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(query), 0, query, 0, NULL);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
+
+    ret = SQLExecute(stmt);
+    while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
+    {
+        int i = (int)rowsFetched;
+
+        SQLGetData(stmt, 2, SQL_C_CHAR,
+                   &selectObject->Options[i].value, sizeof(selectObject->Options[i].value), NULL);
+        SQLGetData(stmt, 3, SQL_C_CHAR,
+                   &selectObject->Options[i].label, sizeof(selectObject->Options[i].label), NULL);
+        rowsFetched++;
+    }
+    selectObject->nOptions = rowsFetched;
+    SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
+}
+
 QUERYSTATUS createMurid(InputField fields[], SQLHDBC *dbConn)
 {
     SQLHSTMT stmt;

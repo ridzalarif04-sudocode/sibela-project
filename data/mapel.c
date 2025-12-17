@@ -92,7 +92,6 @@ void findAllMapelSelect(Select *selectObject, SQLHDBC *dbConn)
                    &selectObject->Options[i].value, sizeof(selectObject->Options[i].value), NULL);
         SQLGetData(stmt, 3, SQL_C_CHAR,
                    &selectObject->Options[i].label, sizeof(selectObject->Options[i].label), NULL);
-        printf("awikwok AMIN: %s\n", selectObject->Options[i].label);
         rowsFetched++;
     }
     selectObject->nOptions = rowsFetched;

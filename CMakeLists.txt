@@ -47,6 +47,7 @@ set(PACKAGES
     data/pengajar.c
     data/materi.c
     data/jadwalPertemuan.c
+    data/jadwalMurid.c
     components/header.c
 )
 

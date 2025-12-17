@@ -68,10 +68,10 @@ void drawMateriCreate(windowModel *windowM)
         {
             Rectangle ModalBox = (Rectangle){.width = 800, .height = 600, .x = 300 + 1620 / 2 - 400, .y = 1080 / 2 - 300};
             DrawRectangleRounded(ModalBox, 0.3, 0, SECONDARY);
-            for (int i = 0; i < windowM->selectByPage.staffPage[windowM->selectedPage].nOptions; i++)
+            for (int i = 0; i < windowM->selectByPage.pengajarPage[windowM->selectedPage].nOptions; i++)
             {
-                SelectProp props = windowM->selectByPage.staffPage[windowM->selectedPage].Options[i];
-                char *text = TextFormat("%d. %s", (windowM->selectByPage.staffPage[windowM->selectedPage].page - 1) * 10 + i + 1, props.label);
+                SelectProp props = windowM->selectByPage.pengajarPage[windowM->selectedPage].Options[i];
+                char *text = TextFormat("%d. %s", (windowM->selectByPage.pengajarPage[windowM->selectedPage].page - 1) * 10 + i + 1, props.label);
                 Vector2 textMeasure = MeasureTextEx(windowM->fontStyle.regular, text, 25, 0);
                 int padding = 40;
                 Rectangle selectbg = (Rectangle){.width = 10 + textMeasure.x, .height = 4 + textMeasure.y, .x = (int)ModalBox.x + padding - 5, (int)ModalBox.y + padding + i * 40 - 2};
@@ -79,11 +79,11 @@ void drawMateriCreate(windowModel *windowM)
                 if (windowM->curPos == i)
                     DrawRectangleRounded(selectbg, 0.3, 0, PRIMARY);
 
-                if (TextIsEqual(props.value, windowM->selectByPage.staffPage[windowM->selectedPage].selected.value))
+                if (TextIsEqual(props.value, windowM->selectByPage.pengajarPage[windowM->selectedPage].selected.value))
                     DrawCircle(ModalBox.x + padding + textMeasure.x + 20, (int)ModalBox.y + padding + i * 40 + textMeasure.y / 2, 8, GREEN);
 
                 DrawTextEx(windowM->fontStyle.regular, text, (Vector2){(int)ModalBox.x + padding, (int)ModalBox.y + padding + i * 40}, 25, 0, SIBELAWHITE);
-                DrawTextEx(windowM->fontStyle.medium, TextFormat("Halaman %d dari %d", windowM->selectByPage.staffPage[windowM->selectedPage].page, windowM->selectByPage.staffPage[windowM->selectedPage].nPage), (Vector2){(int)ModalBox.x + ModalBox.width / 2 - 100, (int)ModalBox.y + ModalBox.height - 60}, 40, 0, SIBELAWHITE);
+                DrawTextEx(windowM->fontStyle.medium, TextFormat("Halaman %d dari %d", windowM->selectByPage.pengajarPage[windowM->selectedPage].page, windowM->selectByPage.pengajarPage[windowM->selectedPage].nPage), (Vector2){(int)ModalBox.x + ModalBox.width / 2 - 100, (int)ModalBox.y + ModalBox.height - 60}, 40, 0, SIBELAWHITE);
             }
         }
     }

@@ -54,10 +54,24 @@ void handleInput(int *ch, int *destLen, char destText[], InputType fieldType, in
         switch (*ch)
         {
         case KEY_ENTER:
-            if (windowM->currWindow == PENGAJARHOME)
+            if (windowM->currWindow == PENGAJARHOME && windowM->selectedPage == MATERI)
             {
-                strcpy(windowM->forms.pengajarPage[windowM->selectedPage].fields[1].value.text, windowM->selectByPage.staffPage[windowM->selectedPage].selected.value);
-                windowM->selectByPage.staffPage[windowM->selectedPage].selected = (SelectProp){};
+                strcpy(windowM->forms.pengajarPage[windowM->selectedPage].fields[1].value.text, windowM->selectByPage.pengajarPage[windowM->selectedPage].selected.value);
+                windowM->selectByPage.pengajarPage[windowM->selectedPage].selected = (SelectProp){};
+            }
+            if (windowM->currWindow == STAFHOME && windowM->selectedPage == JADWAL)
+            {
+                strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[2].value.text, windowM->selectByPage.staffPage[windowM->selectedPage][2].selected.value);
+                windowM->selectByPage.staffPage[windowM->selectedPage][2].selected = (SelectProp){};
+                strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[3].value.text, windowM->selectByPage.staffPage[windowM->selectedPage][3].selected.value);
+                windowM->selectByPage.staffPage[windowM->selectedPage][3].selected = (SelectProp){};
+                strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[4].value.text, windowM->selectByPage.staffPage[windowM->selectedPage][4].selected.value);
+                windowM->selectByPage.staffPage[windowM->selectedPage][4].selected = (SelectProp){};
+                for (int i = 0; i < windowM->selectByPage.staffPage[windowM->selectedPage][6].nMultiSelected; i++)
+                {
+                    strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[6].value.multiValue[i], windowM->selectByPage.staffPage[windowM->selectedPage][6].MultiSelected[i].value);
+                }
+                windowM->forms.staffPage[windowM->selectedPage].fields[6].value.charLen = windowM->selectByPage.staffPage[windowM->selectedPage][6].nMultiSelected;
             }
             if (func != NULL && dataFetcher != NULL)
             {

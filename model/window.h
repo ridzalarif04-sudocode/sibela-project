@@ -102,7 +102,8 @@ typedef struct
 
 typedef struct
 {
-    Select staffPage[10];
+    Select pengajarPage[10];
+    Select (*staffPage)[6];
 } SelectByPage;
 
 typedef struct

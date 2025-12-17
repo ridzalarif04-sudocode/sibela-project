@@ -31,7 +31,7 @@ void findAllJadwalPertemuan(data *datas, int *nPage, SQLHDBC *dbConn)
     *nPage = (int)ceil((float)count / limit);
 
     SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
-    SQLPrepare(stmt, (SQLCHAR *)"SELECT j.id_num, j.id_pertemuan, s.nama AS nama_staff, p.nama AS nama_pengajar,r.lokasi,m.judul_materi, (SELECT COUNT(*) FROM jadwal_murid WHERE jadwal_murid.id_pertemuan = j.id_pertemuan) AS jumlah_murid,j.waktu FROM jadwal_pertemuan j, staff s, pengajar p, ruangan r, materi m WHERE s.id_staff = j.id_staff AND p.id_pengajar = j.id_pengajar AND r.id_ruangan = j.id_ruangan AND m.id_materi = j.id_materi ORDER BY waktu ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
+    SQLPrepare(stmt, (SQLCHAR *)"SELECT j.id_num, j.id_pertemuan, s.nama AS nama_staff, p.nama AS nama_pengajar,r.lokasi,m.judul_materi, (SELECT COUNT(*) FROM jadwal_murid WHERE jadwal_murid.id_pertemuan = j.id_pertemuan) AS jumlah_murid,j.waktu FROM jadwal_pertemuan j, staff s, pengajar p, ruangan r, materi m WHERE s.id_staff = j.id_staff AND p.id_pengajar = j.id_pengajar AND r.id_ruangan = j.id_ruangan AND m.id_materi = j.id_materi ORDER BY j.waktu DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &offset, 0, NULL);
     SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &limit, 0, NULL);
 
@@ -63,3 +63,52 @@ void findAllJadwalPertemuan(data *datas, int *nPage, SQLHDBC *dbConn)
     datas->nJadwalPertemuan = rowsFetched;
     SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
 }
+
+QUERYSTATUS createJadwalPertemuan(InputField fields[], SQLHDBC *dbConn)
+{
+    SQLHSTMT stmt;
+    SQLRETURN ret;
+    int count;
+    SQLUSMALLINT rowStatus[100];
+    char *dateBuff;
+    SQLLEN idind;
+
+    JadwalPertemuan newJadwalPertemuan;
+
+    strcpy(newJadwalPertemuan.id_staff, fields[1].value.text);
+    strcpy(newJadwalPertemuan.id_pengajar, fields[2].value.text);
+    strcpy(newJadwalPertemuan.id_ruangan, fields[3].value.text);
+    strcpy(newJadwalPertemuan.id_materi, fields[4].value.text);
+    strcpy(newJadwalPertemuan.waktu, fields[5].value.text);
+
+    SQLAllocHandle(SQL_HANDLE_STMT, *dbConn, &stmt);
+    SQLPrepare(stmt, (SQLCHAR *)"INSERT INTO jadwal_pertemuan (id_staff, id_pengajar, id_ruangan,id_materi,waktu) OUTPUT inserted.id_pertemuan VALUES (?,?,?,?,?)", SQL_NTS);
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newJadwalPertemuan.id_staff), 0, newJadwalPertemuan.id_staff, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newJadwalPertemuan.id_pengajar), 0, newJadwalPertemuan.id_pengajar, 0, NULL);
+    SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newJadwalPertemuan.id_ruangan), 0, newJadwalPertemuan.id_ruangan, 0, NULL);
+    SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newJadwalPertemuan.id_materi), 0, newJadwalPertemuan.id_materi, 0, NULL);
+    SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, strlen(newJadwalPertemuan.waktu), 0, newJadwalPertemuan.waktu, 0, NULL);
+    ret = SQLExecute(stmt);
+
+    SQLBindCol(stmt, 1, SQL_C_CHAR, newJadwalPertemuan.id_pertemuan, sizeof(newJadwalPertemuan.id_pertemuan), &idind);
+    if (SQL_SUCCEEDED(ret))
+    {
+        ret = SQLFetch(stmt);
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, *dbConn);
+
+    createJadwalMurid(fields[6].value, newJadwalPertemuan.id_pertemuan, dbConn);
+
+    switch (ret)
+    {
+    case SQL_SUCCESS:
+        return SUCCESS;
+
+    default:
+        return FAILED;
+    }
+}
+
+QUERYSTATUS updateJadwalPertemuan(InputField fields[], SQLHDBC *dbConn) {}
+QUERYSTATUS deleteJadwalPertemuan(SQLHDBC *dbConn, Materi updatedMateri) {}

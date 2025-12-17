@@ -43,54 +43,80 @@ void updateView(windowModel *windowM)
             windowM->curPos += 1;
             break;
         case KEY_TAB:
-            if (windowM->activeSubWindow == READ)
+            if (windowM->forms.staffPage[windowM->selectedPage].selectedField == -1)
+                windowM->activeSubWindow = READ;
+            else
             {
-                windowM->cursorEnabled = 1;
-                windowM->selectedPage = -1;
+                windowM->curPos = windowM->forms.staffPage[windowM->selectedPage].selectedField;
+                windowM->forms.staffPage[windowM->selectedPage].selectedField = -1;
             }
-            windowM->activeSubWindow = READ;
-            windowM->curPos = 0;
             break;
 
         default:
 
-            if (!windowM->cursorEnabled && windowM->activeSubWindow == CREATE)
+            if (!windowM->cursorEnabled && (windowM->activeSubWindow == CREATE || windowM->activeSubWindow == UPDATE))
             {
                 switch (ch)
                 {
                 case KEY_RIGHT:
-                    windowM->page++;
-                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
+
+                    if (windowM->forms.staffPage[windowM->selectedPage].selectedField > 0 && windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].page < windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].nPage)
+                    {
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].page++;
+                        windowM->forms.staffPage[windowM->selectedPage].optionFetcher[windowM->forms.staffPage[windowM->selectedPage].selectedField](&windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField], windowM->dbConn);
+                    }
+                    else if (windowM->forms.staffPage[windowM->selectedPage].selectedField < 0)
+                    {
+                        windowM->page++;
+                        windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
+                    }
                     break;
                 case KEY_LEFT:
-                    windowM->page--;
-                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
+                    if (windowM->forms.staffPage[windowM->selectedPage].selectedField > 0 && windowM->forms.staffPage[windowM->selectedPage].selectedField >= 0 && windowM->forms.staffPage[windowM->selectedPage].fields[windowM->forms.staffPage[windowM->selectedPage].selectedField].type == CUSTOMMODAL)
+                    {
+                        if (windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].page > 1)
+                            windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].page--;
+                        windowM->forms.staffPage[windowM->selectedPage].optionFetcher[windowM->forms.staffPage[windowM->selectedPage].selectedField](&windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField], windowM->dbConn);
+                    }
+                    else if (windowM->forms.staffPage[windowM->selectedPage].selectedField < 0)
+                    {
+                        windowM->page--;
+                        windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
+                    }
                     break;
                 default:
-                    int selectedPage = windowM->selectedPage;
-                    int curPos = windowM->curPos;
-                    handleInput(&ch, &windowM->forms.staffPage[selectedPage].fields[curPos].value.charLen, windowM->forms.staffPage[selectedPage].fields[curPos].value.text, windowM->forms.staffPage[selectedPage].fields[curPos].type, 100, windowM->forms.staffPage[selectedPage].createFunc, windowM->forms.staffPage[selectedPage].fields, windowM->dataFetchers.staffPage[selectedPage], windowM);
+                    if (ch == KEY_ENTER && (windowM->forms.staffPage[windowM->selectedPage].fields[windowM->curPos].type == CUSTOMMODAL || windowM->forms.staffPage[windowM->selectedPage].fields[windowM->curPos].type == CUSTOMMODALMULTI) && windowM->forms.staffPage[windowM->selectedPage].selectedField == -1)
+                    {
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos].page = 1;
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos].nMultiSelected = 0;
+                        windowM->forms.staffPage[windowM->selectedPage].optionFetcher[windowM->curPos](&windowM->selectByPage.staffPage[windowM->selectedPage][windowM->curPos], windowM->dbConn);
+                        windowM->forms.staffPage[windowM->selectedPage].selectedField = windowM->curPos;
+                        windowM->curPos = 0;
+                    }
+                    else if (ch == KEY_ENTER && windowM->forms.staffPage[windowM->selectedPage].selectedField >= 0 && windowM->forms.staffPage[windowM->selectedPage].fields[windowM->forms.staffPage[windowM->selectedPage].selectedField].type == CUSTOMMODAL)
+                    {
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].selected = windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].Options[windowM->curPos];
+                    }
+                    else if (ch == KEY_ENTER && windowM->forms.staffPage[windowM->selectedPage].selectedField >= 0 && windowM->forms.staffPage[windowM->selectedPage].fields[windowM->forms.staffPage[windowM->selectedPage].selectedField].type == CUSTOMMODALMULTI)
+                    {
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].MultiSelected[windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].nMultiSelected] = windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].Options[windowM->curPos];
+                        windowM->selectByPage.staffPage[windowM->selectedPage][windowM->forms.staffPage[windowM->selectedPage].selectedField].nMultiSelected++;
+                    }
+                    else
+                    {
+                        int selectedPage = windowM->selectedPage;
+                        int curPos = windowM->curPos;
+                        switch (windowM->activeSubWindow)
+                        {
+                        case UPDATE:
+                            handleInput(&ch, &windowM->forms.staffPage[selectedPage].fields[curPos].value.charLen, windowM->forms.staffPage[selectedPage].fields[curPos].value.text, windowM->forms.staffPage[selectedPage].fields[curPos].type, 100, windowM->forms.staffPage[selectedPage].updateFunction, windowM->forms.staffPage[selectedPage].fields, windowM->dataFetchers.staffPage[selectedPage], windowM);
+                            break;
 
-                    break;
-                }
-            }
-            if (!windowM->cursorEnabled && windowM->activeSubWindow == UPDATE)
-            {
-                switch (ch)
-                {
-                case KEY_RIGHT:
-                    windowM->page++;
-                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
-                    break;
-                case KEY_LEFT:
-                    windowM->page--;
-                    windowM->curPos = windowM->page * windowM->forms.staffPage[windowM->selectedPage].fieldPerPage - windowM->forms.staffPage[windowM->selectedPage].fieldPerPage + 1;
-                    break;
-                default:
-                    int selectedPage = windowM->selectedPage;
-                    int curPos = windowM->curPos;
-                    handleInput(&ch, &windowM->forms.staffPage[selectedPage].fields[curPos].value.charLen, windowM->forms.staffPage[selectedPage].fields[curPos].value.text, windowM->forms.staffPage[selectedPage].fields[curPos].type, 100, windowM->forms.staffPage[selectedPage].updateFunction, windowM->forms.staffPage[selectedPage].fields, windowM->dataFetchers.staffPage[selectedPage], windowM);
-
+                        case CREATE:
+                            handleInput(&ch, &windowM->forms.staffPage[selectedPage].fields[curPos].value.charLen, windowM->forms.staffPage[selectedPage].fields[curPos].value.text, windowM->forms.staffPage[selectedPage].fields[curPos].type, 100, windowM->forms.staffPage[selectedPage].createFunc, windowM->forms.staffPage[selectedPage].fields, windowM->dataFetchers.staffPage[selectedPage], windowM);
+                            break;
+                        }
+                    }
                     break;
                 }
             }
@@ -99,6 +125,8 @@ void updateView(windowModel *windowM)
                 switch (ch)
                 {
                 case KEY_N:
+                    strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[1].value.text, windowM->authUser.id);
+                    windowM->forms.staffPage[windowM->selectedPage].fields[1].value.charLen = strlen(windowM->authUser.id);
                     windowM->activeSubWindow = CREATE;
                     windowM->page = 1;
                     windowM->curPos = 1;
@@ -152,6 +180,8 @@ void updateView(windowModel *windowM)
                         copyStringData(windowM->focusedData.mapel.nama_mapel, &windowM->forms.staffPage[MAPEL].fields[1].value);
                         break;
                     }
+                    strcpy(windowM->forms.staffPage[windowM->selectedPage].fields[1].value.text, windowM->authUser.id);
+                    windowM->forms.staffPage[windowM->selectedPage].fields[1].value.charLen = strlen(windowM->authUser.id);
                     windowM->activeSubWindow = UPDATE;
                     windowM->page = 1;
                     windowM->curPos = 1;
@@ -213,9 +243,9 @@ void updateView(windowModel *windowM)
             case KEY_RIGHT:
                 if (windowM->forms.pengajarPage[windowM->selectedPage].selectedField >= 0 && windowM->forms.pengajarPage[windowM->selectedPage].fields[windowM->forms.pengajarPage[windowM->selectedPage].selectedField].type == CUSTOMMODAL)
                 {
-                    if (windowM->selectByPage.staffPage[windowM->selectedPage].page < windowM->selectByPage.staffPage[windowM->selectedPage].nPage)
-                        windowM->selectByPage.staffPage[windowM->selectedPage].page++;
-                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.staffPage[windowM->selectedPage], windowM->dbConn);
+                    if (windowM->selectByPage.pengajarPage[windowM->selectedPage].page < windowM->selectByPage.pengajarPage[windowM->selectedPage].nPage)
+                        windowM->selectByPage.pengajarPage[windowM->selectedPage].page++;
+                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.pengajarPage[windowM->selectedPage], windowM->dbConn);
                 }
                 else if (windowM->forms.pengajarPage[windowM->selectedPage].selectedField < 0)
                 {
@@ -226,9 +256,9 @@ void updateView(windowModel *windowM)
             case KEY_LEFT:
                 if (windowM->forms.pengajarPage[windowM->selectedPage].selectedField >= 0 && windowM->forms.pengajarPage[windowM->selectedPage].fields[windowM->forms.pengajarPage[windowM->selectedPage].selectedField].type == CUSTOMMODAL)
                 {
-                    if (windowM->selectByPage.staffPage[windowM->selectedPage].page > 1)
-                        windowM->selectByPage.staffPage[windowM->selectedPage].page--;
-                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.staffPage[windowM->selectedPage], windowM->dbConn);
+                    if (windowM->selectByPage.pengajarPage[windowM->selectedPage].page > 1)
+                        windowM->selectByPage.pengajarPage[windowM->selectedPage].page--;
+                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.pengajarPage[windowM->selectedPage], windowM->dbConn);
                 }
                 else if (windowM->forms.pengajarPage[windowM->selectedPage].selectedField < 0)
                 {
@@ -239,14 +269,14 @@ void updateView(windowModel *windowM)
             default:
                 if (ch == KEY_ENTER && windowM->forms.pengajarPage[windowM->selectedPage].fields[windowM->curPos].type == CUSTOMMODAL && windowM->forms.pengajarPage[windowM->selectedPage].selectedField == -1)
                 {
-                    windowM->selectByPage.staffPage[windowM->selectedPage].page = 1;
-                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.staffPage[windowM->selectedPage], windowM->dbConn);
+                    windowM->selectByPage.pengajarPage[windowM->selectedPage].page = 1;
+                    windowM->forms.pengajarPage[windowM->selectedPage].optionFetcher[windowM->selectedPage](&windowM->selectByPage.pengajarPage[windowM->selectedPage], windowM->dbConn);
                     windowM->forms.pengajarPage[windowM->selectedPage].selectedField = windowM->curPos;
                     windowM->curPos = 0;
                 }
                 else if (ch == KEY_ENTER && windowM->forms.pengajarPage[windowM->selectedPage].selectedField >= 0)
                 {
-                    windowM->selectByPage.staffPage[windowM->selectedPage].selected = windowM->selectByPage.staffPage[windowM->selectedPage].Options[windowM->curPos];
+                    windowM->selectByPage.pengajarPage[windowM->selectedPage].selected = windowM->selectByPage.pengajarPage[windowM->selectedPage].Options[windowM->curPos];
                 }
                 else
                 {
@@ -355,8 +385,8 @@ void updateView(windowModel *windowM)
                 case MATERI:
                     copyStringData(windowM->focusedData.materi.id_materi, &windowM->forms.pengajarPage[2].fields[0].value);
                     copyStringData(windowM->focusedData.materi.id_mapel, &windowM->forms.pengajarPage[2].fields[1].value);
-                    strcpy(windowM->selectByPage.staffPage[windowM->selectedPage].selected.value, windowM->focusedData.materi.id_mapel);
-                    strcpy(windowM->selectByPage.staffPage[windowM->selectedPage].selected.label, windowM->focusedData.materi.nama_mapel);
+                    strcpy(windowM->selectByPage.pengajarPage[windowM->selectedPage].selected.value, windowM->focusedData.materi.id_mapel);
+                    strcpy(windowM->selectByPage.pengajarPage[windowM->selectedPage].selected.label, windowM->focusedData.materi.nama_mapel);
                     copyStringData(windowM->focusedData.materi.judul_materi, &windowM->forms.pengajarPage[2].fields[2].value);
                     copyStringData(windowM->focusedData.materi.isi_materi, &windowM->forms.pengajarPage[2].fields[3].value);
                     break;

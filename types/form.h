@@ -6,7 +6,9 @@
 typedef struct
 {
     char text[100];
+    char multiValue[50][8];
     int charLen;
+    int selected;
 } InputParams;
 
 typedef enum
@@ -16,7 +18,8 @@ typedef enum
     SHORTINPUT,
     NUMERICINPUT,
     LONGTEXTINPUT,
-    CUSTOMMODAL
+    CUSTOMMODAL,
+    CUSTOMMODALMULTI,
 } InputType;
 
 typedef struct
@@ -33,6 +36,8 @@ typedef struct
     int nPage;
     char searchQuery[100];
     SelectProp selected;
+    int nMultiSelected;
+    SelectProp MultiSelected[50];
 } Select;
 
 typedef struct
