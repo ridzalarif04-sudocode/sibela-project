@@ -45,4 +45,5 @@ void drawRootView(windowModel *windowM)
         drawMemberPage(windowM);
         break;
     }
+    DrawLegend(windowM);
 }

@@ -12,6 +12,7 @@
 #include "../data/pengajar.h"
 #include "../data/materi.h"
 #include "../data/jadwalPertemuan.h"
+#define MAX_LEGEND 10
 
 typedef enum
 {
@@ -43,7 +44,12 @@ typedef struct
 {
     char nama[50];
     int targetPage;
-} NavMenus;
+} NavMenus; 
+
+typedef struct {
+    const char *key;
+    const char *desc;
+} LegendItem;
 
 typedef struct
 {
@@ -144,6 +150,7 @@ typedef struct
     bool isLoading;
     float loadingTime;
     float progress;
+    LegendItem legends[MAX_LEGEND];
 } windowModel;
 
 void initForm(windowModel *windowM);

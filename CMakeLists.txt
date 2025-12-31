@@ -52,6 +52,7 @@ set(PACKAGES
     data/jadwalPertemuan.c
     data/jadwalMurid.c
     components/header.c
+    components/ui/legend.c
 )
 
 add_executable(sibela main.c ${PACKAGES})
